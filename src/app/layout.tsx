@@ -76,7 +76,7 @@ export default function RootLayout({
                 <Swords className="nav-link-icon" /> Tracker
               </a>
               <a 
-                href="https://paypal.me/p_estor" 
+                href="https://paypal.me/pestordev" 
                 target="_blank" 
                 rel="noopener noreferrer" 
                 className="nav-link nav-donate-btn"
