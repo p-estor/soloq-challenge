@@ -680,11 +680,14 @@ button, input, select {
   border-radius: 8px;
   background: rgba(5, 8, 12, 0.4);
   border: 1px solid var(--border-normal);
-  transition: border-color 0.2s ease;
+  transition: all 0.2s ease;
 }
 
 .feed-item:hover {
-  border-color: rgba(255, 255, 255, 0.1);
+  border-color: rgba(139, 92, 246, 0.5);
+  background: rgba(139, 92, 246, 0.05);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.1);
 }
 
 .feed-item.feed-win {
