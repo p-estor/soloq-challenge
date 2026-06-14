@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { Outfit } from 'next/font/google';
 import './globals.css';
 import Link from 'next/link';
-import { Trophy, ShieldAlert, Award } from 'lucide-react';
+import { Trophy, ShieldAlert, Award, Swords } from 'lucide-react';
 
 const outfit = Outfit({
   subsets: ['latin'],
@@ -67,6 +67,37 @@ export default function RootLayout({
               <Link href="/logros" className="nav-link">
                 <Award className="nav-link-icon" /> Logros
               </Link>
+              <a 
+                href={process.env.NEXT_PUBLIC_TRACKER_URL || 'https://tracker.chupachotas.es'} 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="nav-link"
+              >
+                <Swords className="nav-link-icon" /> Tracker
+              </a>
+              <a 
+                href="https://paypal.me/p_estor" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="nav-link nav-donate-btn"
+                style={{
+                  marginLeft: '0.5rem',
+                  padding: '0.35rem 0.75rem',
+                  borderRadius: '6px',
+                  background: 'linear-gradient(135deg, #0079c1 0%, #00457c 100%)',
+                  color: '#ffffff',
+                  fontWeight: 600,
+                  fontSize: '0.8rem',
+                  border: '1px solid rgba(255,255,255,0.1)',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.35rem',
+                  transition: 'all 0.2s ease',
+                  boxShadow: '0 2px 8px rgba(0, 121, 193, 0.3)',
+                }}
+              >
+                ☕ Donar
+              </a>
             </nav>
           </div>
         </header>
