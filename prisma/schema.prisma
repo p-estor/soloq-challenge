@@ -1,0 +1,89 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model Player {
+  id              String       @id @default(uuid())
+  gameName        String       // Riot ID game name (before #)
+  tagLine         String       // Riot ID tag line (after #)
+  alias           String?      // Optional custom display name / alias for the leaderboard
+  puuid           String       @unique
+  summonerId      String?      @unique
+  profileIconId   Int          @default(0)
+  isHighElo       Boolean      @default(false)
+  
+  // Current LoL Stats
+  tier            String       @default("UNRANKED") // e.g., DIAMOND, MASTER, CHALLENGER, UNRANKED
+  rank            String       @default("")         // e.g., I, II, III, IV
+  leaguePoints    Int          @default(0)
+  wins            Int          @default(0)
+  losses          Int          @default(0)
+  streak          Int          @default(0)          // positive for winstreak, negative for lossstreak
+  
+  // Starting Stats (to measure progress, e.g. +300 LP since start)
+  startTier       String       @default("UNRANKED")
+  startRank       String       @default("")
+  startLp         Int          @default(0)
+  
+  lastUpdated     DateTime     @default(now())
+  createdAt       DateTime     @default(now())
+  
+  // Main account details
+  mainGameName    String?
+  mainTagLine     String?
+  mainTier        String?
+  mainRank        String?
+  mainLp          Int?
+  
+  // Relations
+  snapshots       LPSnapshot[]
+  matches         Match[]
+}
+
+model LPSnapshot {
+  id           String   @id @default(uuid())
+  playerId     String
+  player       Player   @relation(fields: [playerId], references: [id], onDelete: Cascade)
+  
+  tier         String
+  rank         String
+  leaguePoints Int
+  globalLp     Int      // Absolute LP value computed for charts (e.g. Master 100LP = 2500)
+  
+  timestamp    DateTime @default(now())
+}
+
+model Match {
+  id            String   @id @default(uuid())
+  matchId       String   // Riot Match ID (e.g. EUW1_123456789)
+  playerId      String
+  player        Player   @relation(fields: [playerId], references: [id], onDelete: Cascade)
+  
+  championId    Int
+  championName  String
+  win           Boolean
+  kills         Int
+  deaths        Int
+  assists       Int
+  cs            Int
+  gameDuration  Int      // Duration in seconds
+  gameCreation  DateTime // Date when match was played
+  queueId       Int      // LoL queue ID (e.g. 420 for SoloQ)
+  isRemake      Boolean  @default(false)
+  pentaKills    Int      @default(0)
+  objectivesStolen Int   @default(0)
+  
+  createdAt     DateTime @default(now())
+
+  @@unique([playerId, matchId])
+}
+
+model Settings {
+  key   String @id // e.g. "config"
+  value String // JSON serialized string for configuration values
+}
