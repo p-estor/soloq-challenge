@@ -80,6 +80,7 @@ export interface ProcessedMatch {
   player: {
     gameName: string;
     alias: string | null;
+    tagLine: string;
   };
 }
 
@@ -404,9 +405,13 @@ export default function LeaderboardTable({ players, matches }: LeaderboardTableP
                 </div>
               ) : (
                 filteredMatches.map((match) => (
-                  <div
+                  <a
                     key={match.id}
+                    href={`${process.env.NEXT_PUBLIC_TRACKER_URL || 'https://tracker.chupachotas.es'}/euw/${match.player.gameName}-${match.player.tagLine}?match=${match.matchId}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className={`feed-item ${match.isRemake ? 'feed-remake' : match.win ? 'feed-win' : 'feed-loss'}`}
+                    style={{ textDecoration: 'none', color: 'inherit' }}
                   >
                     <div className="feed-left">
                       <FallbackImage
@@ -430,7 +435,7 @@ export default function LeaderboardTable({ players, matches }: LeaderboardTableP
                       </span>
                       <span className="feed-time">{timeAgo(match.gameCreation)}</span>
                     </div>
-                  </div>
+                  </a>
                 ))
               )}
             </div>

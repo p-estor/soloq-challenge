@@ -55,6 +55,7 @@ export default async function LeaderboardPage() {
         select: {
           gameName: true,
           alias: true,
+          tagLine: true,
         },
       },
     },
@@ -114,6 +115,7 @@ export default async function LeaderboardPage() {
     player: {
       gameName: match.player.gameName,
       alias: match.player.alias,
+      tagLine: match.player.tagLine,
     },
   }));
 
