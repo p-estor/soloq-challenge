@@ -389,6 +389,7 @@ export default function LeaderboardTable({ players, matches }: LeaderboardTableP
       {/* Right column: Activity feed */}
       <div className="sidebar-wrapper">
         <div className="sidebar-inner">
+
           <div style={{ marginBottom: '0.75rem', display: 'flex', alignItems: 'center', height: '2.5rem' }}>
             <h2 style={{ fontSize: '1.25rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em', margin: 0, display: 'flex', alignItems: 'center', gap: '0.5rem', whiteSpace: 'nowrap' }}>
               <Zap className="sidebar-title-icon animate-pulse-glow" style={{ color: 'var(--accent-purple)', width: '1.25rem', height: '1.25rem' }} />

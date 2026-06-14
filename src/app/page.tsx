@@ -162,8 +162,10 @@ export default async function LeaderboardPage() {
         title="Fin del SoloQ Challenge"
         badgeText="7 de Julio, 2026 - 23:59"
       />
+
       {/* Standings Dashboard Header Cards */}
       <div className="stats-grid">
+
         <div className="glass-panel stat-card">
           <div className="stat-icon-wrapper">
             <Users size={20} />
