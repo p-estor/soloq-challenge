@@ -14,6 +14,13 @@ El proyecto está actualmente desplegado y en vivo en: **[chupachotas.es](https:
 
 ---
 
+## 🔗 Ecosistema e Integración con Chupachotas Tracker
+Esta plataforma web forma parte de un ecosistema desacoplado interconectado con **[Chupachotas Tracker](https://tracker.chupachotas.es)** (`github.com/p-estor/chupachotas-tracker`):
+*   **Base de datos compartida:** El backend de la aplicación del tracker consulta directamente la base de datos de producción SQLite de este proyecto para sincronizar los participantes activos y sus posiciones.
+*   **Redirecciones en vivo:** El panel y el feed de actividad redirigen de forma dinámica cada partida y jugador al tracker mediante parámetros de query (`?match={matchId}`), facilitando una transición suave de usuario hacia una auditoría detallada de la partida (KDA, MMR promedio de sala, notas MVP/ACE).
+
+---
+
 ## 🛠️ Stack Tecnológico
 *   **Framework:** [Next.js](https://nextjs.org/) (React) con TypeScript.
 *   **Bases de Datos:** MySQL en producción / SQLite en desarrollo local.
