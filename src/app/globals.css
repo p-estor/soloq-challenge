@@ -1936,3 +1936,14 @@ button, input, select {
   filter: brightness(1.1);
   box-shadow: 0 6px 16px rgba(0, 121, 193, 0.4) !important;
 }
+
+/* ── Tipografía mono: datos numéricos ───────────────────────────────────── */
+.rank-lp,
+.winrate-percent,
+.stat-value,
+.feed-time,
+.feed-stats {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
