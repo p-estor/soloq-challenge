@@ -169,7 +169,7 @@ export default function LeaderboardTable({ players, matches }: LeaderboardTableP
     <div className="layout-split">
       {/* Left column: Leaderboard */}
       <div>
-        <div style={{ marginBottom: '0.75rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', height: '2.5rem' }}>
+        <div className="leaderboard-header-row" style={{ marginBottom: '0.75rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', height: '2.5rem' }}>
           <h2 style={{ fontSize: '1.25rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em', margin: 0, whiteSpace: 'nowrap' }}>
             Tabla de Clasificación
           </h2>

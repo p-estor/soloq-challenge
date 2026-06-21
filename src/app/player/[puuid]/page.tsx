@@ -188,15 +188,15 @@ export default async function PlayerProfilePage({ params }: PlayerPageProps) {
       </Link>
 
       {/* Player Profile Header Card */}
-      <div className="glass-panel player-header" style={{ padding: '2rem', marginBottom: '2rem' }}>
+      <div className="glass-panel player-header" style={{ padding: 'var(--card-padding)', marginBottom: '2rem' }}>
         <FallbackImage
           src={`https://ddragon.leagueoflegends.com/cdn/16.10.1/img/profileicon/${player.profileIconId}.png`}
           alt="Profile Icon"
           className="player-big-icon"
           fallbackSrc="https://ddragon.leagueoflegends.com/cdn/16.10.1/img/profileicon/29.png"
         />
-        <div className="player-meta" style={{ flex: 1 }}>
-          <div className="player-name-row" style={{ display: 'flex', alignItems: 'center', width: '100%', gap: '1rem' }}>
+        <div className="player-meta" style={{ flex: 1, minWidth: 0 }}>
+          <div className="player-name-row" style={{ display: 'flex', alignItems: 'center', width: '100%', gap: '1rem', flexWrap: 'wrap' }}>
             <div style={{ display: 'flex', flexDirection: 'column' }}>
               <h1 className="player-title-alias" style={{ margin: 0 }}>{player.alias || player.gameName}</h1>
               <span className="player-title-riotid">

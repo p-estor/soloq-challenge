@@ -106,9 +106,9 @@ export default function RootLayout({
           {children}
         </main>
         
-        <footer className="main-footer">
+        <footer className="main-footer" style={{ textAlign: 'center', marginTop: '4rem', padding: '2rem 0', borderTop: '1px solid var(--border-normal)', color: 'var(--text-muted)', fontSize: '0.85rem', lineHeight: '1.6' }}>
           <p>© {new Date().getFullYear()} Chupachotas SoloQ Challenge. Todos los derechos reservados.</p>
-          <p className="footer-credits">Desarrollado con pasión para League of Legends EUW</p>
+          <p className="footer-credits" style={{ color: 'var(--text-muted)', fontSize: '0.8rem', marginTop: '0.25rem' }}>Desarrollado con pasión para League of Legends EUW</p>
         </footer>
       </body>
     </html>
