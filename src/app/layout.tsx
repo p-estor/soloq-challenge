@@ -53,7 +53,10 @@ export default function RootLayout({
         <header className="main-header">
           <div className="nav-container">
             <Link href="/" className="logo-section">
-              <Trophy className="logo-icon animate-pulse-glow" />
+              <svg viewBox="0 0 40 42" fill="none" xmlns="http://www.w3.org/2000/svg" className="logo-icon animate-pulse-glow" aria-hidden="true">
+                <polygon points="20,2 38,20 20,20 2,20" fill="var(--accent-cyan)"/>
+                <polygon points="20,22 38,22 20,40 2,22" fill="var(--accent-purple)"/>
+              </svg>
               <div className="logo-text">
                 <span className="logo-highlight">CHUPACHOTAS</span>
                 <span className="logo-sub">SOLOQ CHALLENGE</span>
@@ -80,21 +83,6 @@ export default function RootLayout({
                 target="_blank" 
                 rel="noopener noreferrer" 
                 className="nav-link nav-donate-btn"
-                style={{
-                  marginLeft: '0.5rem',
-                  padding: '0.35rem 0.75rem',
-                  borderRadius: '6px',
-                  background: 'linear-gradient(135deg, #0079c1 0%, #00457c 100%)',
-                  color: '#ffffff',
-                  fontWeight: 600,
-                  fontSize: '0.8rem',
-                  border: '1px solid rgba(255,255,255,0.1)',
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '0.35rem',
-                  transition: 'all 0.2s ease',
-                  boxShadow: '0 2px 8px rgba(0, 121, 193, 0.3)',
-                }}
               >
                 ☕ Donar
               </a>
