@@ -77,6 +77,9 @@ model Match {
   isRemake      Boolean  @default(false)
   pentaKills    Int      @default(0)
   objectivesStolen Int   @default(0)
+  enemyJungleMonsterKills Int @default(0)
+  visionScore    Int      @default(0)
+  wardsKilled    Int      @default(0)
   
   createdAt     DateTime @default(now())
 

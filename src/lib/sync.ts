@@ -158,6 +158,9 @@ export async function syncPlayer(playerId: string): Promise<void> {
               isRemake,
               pentaKills: participant.pentaKills || 0,
               objectivesStolen: participant.objectivesStolen || 0,
+              enemyJungleMonsterKills: participant.challenges?.enemyJungleMonsterKills || 0,
+              visionScore: participant.visionScore || 0,
+              wardsKilled: participant.wardsKilled || 0,
             },
           });
         }

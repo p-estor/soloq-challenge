@@ -1,6 +1,7 @@
 export interface MatchDataForStreak {
   win: boolean;
   gameCreation: Date;
+  championName: string;
 }
 
 export interface PlayerForStreak {
@@ -10,20 +11,26 @@ export interface PlayerForStreak {
   matches: MatchDataForStreak[];
 }
 
+export interface StreakWinner {
+  player: PlayerForStreak;
+  date: Date;
+  championName: string;
+}
+
 /**
- * Calculates who is the first player to achieve a win streak of target consecutive wins.
- * Returns the player and the exact date when the streak was achieved.
+ * Calculates all players who have achieved a win streak of target consecutive wins.
+ * Returns a list of winners sorted by the date when the streak was first achieved.
  */
-export function calculateFirstToStreak(
+export function calculateStreakWinners(
   players: PlayerForStreak[],
   targetStreak: number = 10
-): { player: PlayerForStreak | null; date: Date | null } {
-  let streakWinner: PlayerForStreak | null = null;
-  let streakDate: Date | null = null;
+): StreakWinner[] {
+  const winners: StreakWinner[] = [];
 
   for (const p of players) {
     let currentStreak = 0;
     let streakAchievedDate: Date | null = null;
+    let streakChampionName = '';
     
     // Sort matches chronologically to ensure correct sequence
     const sortedMatches = [...p.matches].sort(
@@ -34,8 +41,9 @@ export function calculateFirstToStreak(
       if (m.win) {
         currentStreak++;
         if (currentStreak === targetStreak) {
-          // Record the date of the 10th consecutive win
+          // Record the date and champion of the 10th consecutive win
           streakAchievedDate = new Date(m.gameCreation);
+          streakChampionName = m.championName;
         }
       } else {
         currentStreak = 0;
@@ -43,13 +51,14 @@ export function calculateFirstToStreak(
     }
     
     if (streakAchievedDate) {
-      // Find the first player who achieved it chronologically
-      if (!streakWinner || !streakDate || streakAchievedDate < streakDate) {
-        streakWinner = p;
-        streakDate = streakAchievedDate;
-      }
+      winners.push({
+        player: p,
+        date: streakAchievedDate,
+        championName: streakChampionName,
+      });
     }
   }
 
-  return { player: streakWinner, date: streakDate };
+  // Sort chronologically ascending (earliest to achieve it first)
+  return winners.sort((a, b) => a.date.getTime() - b.date.getTime());
 }

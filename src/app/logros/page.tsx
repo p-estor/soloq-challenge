@@ -1,9 +1,12 @@
 import type { Metadata } from 'next';
 import { prisma } from '@/lib/db';
 import Link from 'next/link';
-import { Trophy, Award, Skull, Clock, Flame, Zap, Shield, HelpCircle, Users } from 'lucide-react';
+import { Trophy, Award, Skull, Clock, Flame, Zap, Shield, HelpCircle, Users, Eye, EyeOff } from 'lucide-react';
 import FallbackImage from '@/components/FallbackImage';
-import { calculateFirstToStreak } from '@/lib/achievements';
+import { calculateStreakWinners } from '@/lib/achievements';
+import SpecialAchievementsList from '@/components/SpecialAchievementsList';
+
+
 
 
 export const revalidate = 60; // Revalidate this page every 60 seconds
@@ -87,17 +90,43 @@ export default async function AchievementsPage() {
   };
 
   // 2. Fetch special achievements status dynamically from the database
-  const firstPentaMatch = await prisma.match.findFirst({
+  const pentaMatches = await prisma.match.findMany({
     where: { pentaKills: { gt: 0 }, isRemake: false },
     orderBy: { gameCreation: 'asc' },
     include: { player: true },
   });
 
-  const firstStealMatch = await prisma.match.findFirst({
+  const pentaWinnersMap = new Map<string, { player: any, date: Date, championName: string, detail: string }>();
+  for (const m of pentaMatches) {
+    if (!pentaWinnersMap.has(m.playerId)) {
+      pentaWinnersMap.set(m.playerId, {
+        player: m.player,
+        date: m.gameCreation,
+        championName: m.championName,
+        detail: `Pentakill con ${m.championName}`,
+      });
+    }
+  }
+  const pentaWinners = Array.from(pentaWinnersMap.values()).sort((a, b) => a.date.getTime() - b.date.getTime());
+
+  const stealMatches = await prisma.match.findMany({
     where: { objectivesStolen: { gt: 0 }, isRemake: false },
     orderBy: { gameCreation: 'asc' },
     include: { player: true },
   });
+
+  const stealWinnersMap = new Map<string, { player: any, date: Date, championName: string, detail: string }>();
+  for (const m of stealMatches) {
+    if (!stealWinnersMap.has(m.playerId)) {
+      stealWinnersMap.set(m.playerId, {
+        player: m.player,
+        date: m.gameCreation,
+        championName: m.championName,
+        detail: `Robo con ${m.championName}`,
+      });
+    }
+  }
+  const stealWinners = Array.from(stealWinnersMap.values()).sort((a, b) => a.date.getTime() - b.date.getTime());
 
   const playersForStreak = await prisma.player.findMany({
     include: {
@@ -108,8 +137,73 @@ export default async function AchievementsPage() {
     }
   });
 
-  const { player: streakWinner, date: streakDate } = calculateFirstToStreak(playersForStreak, 10);
+  const streakWinnersData = calculateStreakWinners(playersForStreak, 10);
+  const streakWinners = streakWinnersData.map(w => ({
+    player: w.player,
+    date: w.date,
+    championName: w.championName,
+    detail: `Racha con ${w.championName}`,
+  }));
 
+  // New Achievement 1: Lo mío es mío y lo tuyo también (>= 20 enemy jungle kills)
+  const jungleMatches = await prisma.match.findMany({
+    where: { enemyJungleMonsterKills: { gte: 20 }, isRemake: false },
+    orderBy: { gameCreation: 'asc' },
+    include: { player: true },
+  });
+
+  const jungleWinnersMap = new Map<string, { player: any, date: Date, championName: string, detail: string }>();
+  for (const m of jungleMatches) {
+    if (!jungleWinnersMap.has(m.playerId)) {
+      jungleWinnersMap.set(m.playerId, {
+        player: m.player,
+        date: m.gameCreation,
+        championName: m.championName,
+        detail: `Robados ${m.enemyJungleMonsterKills} monstruos`,
+      });
+    }
+  }
+  const jungleWinners = Array.from(jungleWinnersMap.values()).sort((a, b) => a.date.getTime() - b.date.getTime());
+
+  // New Achievement 2: Faro (>= 100 vision score)
+  const visionMatches = await prisma.match.findMany({
+    where: { visionScore: { gte: 100 }, isRemake: false },
+    orderBy: { gameCreation: 'asc' },
+    include: { player: true },
+  });
+
+  const visionWinnersMap = new Map<string, { player: any, date: Date, championName: string, detail: string }>();
+  for (const m of visionMatches) {
+    if (!visionWinnersMap.has(m.playerId)) {
+      visionWinnersMap.set(m.playerId, {
+        player: m.player,
+        date: m.gameCreation,
+        championName: m.championName,
+        detail: `Puntuación de visión: ${m.visionScore}`,
+      });
+    }
+  }
+  const visionWinners = Array.from(visionWinnersMap.values()).sort((a, b) => a.date.getTime() - b.date.getTime());
+
+  // New Achievement 3: Luces fuera (>= 15 wards killed)
+  const wardMatches = await prisma.match.findMany({
+    where: { wardsKilled: { gte: 15 }, isRemake: false },
+    orderBy: { gameCreation: 'asc' },
+    include: { player: true },
+  });
+
+  const wardWinnersMap = new Map<string, { player: any, date: Date, championName: string, detail: string }>();
+  for (const m of wardMatches) {
+    if (!wardWinnersMap.has(m.playerId)) {
+      wardWinnersMap.set(m.playerId, {
+        player: m.player,
+        date: m.gameCreation,
+        championName: m.championName,
+        detail: `Destruidos ${m.wardsKilled} centinelas`,
+      });
+    }
+  }
+  const wardWinners = Array.from(wardWinnersMap.values()).sort((a, b) => a.date.getTime() - b.date.getTime());
 
   // Helper to format date
   const formatDate = (date: Date) => {
@@ -124,29 +218,23 @@ export default async function AchievementsPage() {
   const exampleAchievements = [
     {
       id: 'penta_1',
-      title: 'Primera Pentakill',
-      description: '¡Conseguir la primera Pentakill de todo el torneo!',
+      title: 'Pentakill',
+      description: 'Conseguir una Pentakill en el torneo.',
       icon: Skull,
       color: 'var(--accent-gold)',
       shadow: 'var(--shadow-gold)',
-      unlockedBy: firstPentaMatch ? (firstPentaMatch.player.alias || firstPentaMatch.player.gameName) : null,
-      detail: firstPentaMatch 
-        ? `Desbloqueado el ${formatDate(firstPentaMatch.gameCreation)} con ${firstPentaMatch.championName}` 
-        : 'Recompensa especial en el servidor',
-      status: firstPentaMatch ? 'Desbloqueado' : 'Bloqueado',
+      winners: pentaWinners,
+      status: pentaWinners.length > 0 ? 'Desbloqueado' : 'Bloqueado',
     },
     {
       id: 'baron_steal',
       title: 'Ojo de Halcón',
-      description: 'Robar un Barón Nashor o Dragón Anciano de forma heroica (objetivos robados).',
+      description: 'Robar un Barón Nashor o Dragón Anciano (objetivo robado).',
       icon: Zap,
       color: 'var(--accent-cyan)',
       shadow: 'var(--shadow-neon)',
-      unlockedBy: firstStealMatch ? (firstStealMatch.player.alias || firstStealMatch.player.gameName) : null,
-      detail: firstStealMatch 
-        ? `Desbloqueado el ${formatDate(firstStealMatch.gameCreation)} con ${firstStealMatch.championName}` 
-        : 'Recompensa especial en el servidor',
-      status: firstStealMatch ? 'Desbloqueado' : 'Bloqueado',
+      winners: stealWinners,
+      status: stealWinners.length > 0 ? 'Desbloqueado' : 'Bloqueado',
     },
     {
       id: 'win_streak_10',
@@ -154,14 +242,42 @@ export default async function AchievementsPage() {
       description: 'Alcanzar una racha de 10 victorias consecutivas.',
       icon: Flame,
       color: 'var(--loss-color)',
-      shadow: 'rgba(239, 68, 68, 0.2)',
-      unlockedBy: streakWinner ? (streakWinner.alias || streakWinner.gameName) : null,
-      detail: streakWinner && streakDate
-        ? `Desbloqueado el ${formatDate(streakDate)}` 
-        : 'Recompensa especial en el servidor',
-      status: streakWinner ? 'Desbloqueado' : 'Bloqueado',
+      shadow: '0 0 20px rgba(239, 68, 68, 0.2)',
+      winners: streakWinners,
+      status: streakWinners.length > 0 ? 'Desbloqueado' : 'Bloqueado',
+    },
+    {
+      id: 'enemy_jungle_stealer',
+      title: 'Lo mío es mío',
+      description: 'Robar 20 o más monstruos de la jungla enemiga en una sola partida.',
+      icon: Shield,
+      color: 'var(--accent-gold)',
+      shadow: '0 0 20px rgba(200, 170, 110, 0.2)',
+      winners: jungleWinners,
+      status: jungleWinners.length > 0 ? 'Desbloqueado' : 'Bloqueado',
+    },
+    {
+      id: 'vision_god',
+      title: 'Faro',
+      description: 'Conseguir una puntuación de visión de 100 o más en una sola partida.',
+      icon: Eye,
+      color: 'var(--accent-cyan)',
+      shadow: '0 0 20px rgba(0, 210, 255, 0.2)',
+      winners: visionWinners,
+      status: visionWinners.length > 0 ? 'Desbloqueado' : 'Bloqueado',
+    },
+    {
+      id: 'ward_slayer',
+      title: 'Luces fuera',
+      description: 'Destruir 15 o más centinelas (wards) enemigos en una sola partida.',
+      icon: EyeOff,
+      color: 'var(--accent-purple)',
+      shadow: '0 0 20px rgba(168, 85, 247, 0.2)',
+      winners: wardWinners,
+      status: wardWinners.length > 0 ? 'Desbloqueado' : 'Bloqueado',
     },
   ];
+
 
   return (
     <main style={{ maxWidth: '1200px', margin: '0 auto', padding: '1rem 0', color: 'var(--text-primary)' }}>
@@ -185,12 +301,12 @@ export default async function AchievementsPage() {
 
       <div style={{
         display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 320px), 1fr))',
         gap: '1.5rem',
         marginBottom: '4rem'
       }}>
         {/* El más viciado */}
-        <div className="glass-panel" style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: '1rem' }}>
+        <div className="glass-panel" style={{ padding: 'var(--card-padding)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: '1rem' }}>
           <div>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.75rem' }}>
               <span style={{ padding: '0.35rem 0.75rem', borderRadius: '6px', background: 'rgba(0, 210, 255, 0.08)', color: 'var(--accent-cyan)', border: '1px solid rgba(0, 210, 255, 0.15)', fontSize: '0.75rem', fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: '0.25rem' }}>
@@ -230,7 +346,7 @@ export default async function AchievementsPage() {
         </div>
 
         {/* Terror de la Grieta */}
-        <div className="glass-panel" style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: '1rem' }}>
+        <div className="glass-panel" style={{ padding: 'var(--card-padding)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: '1rem' }}>
           <div>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.75rem' }}>
               <span style={{ padding: '0.35rem 0.75rem', borderRadius: '6px', background: 'rgba(239, 68, 68, 0.08)', color: 'var(--loss-color)', border: '1px solid rgba(239, 68, 68, 0.15)', fontSize: '0.75rem', fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: '0.25rem' }}>
@@ -268,7 +384,7 @@ export default async function AchievementsPage() {
         </div>
 
         {/* El Inmortal */}
-        <div className="glass-panel" style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: '1rem' }}>
+        <div className="glass-panel" style={{ padding: 'var(--card-padding)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: '1rem' }}>
           <div>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.75rem' }}>
               <span style={{ padding: '0.35rem 0.75rem', borderRadius: '6px', background: 'rgba(16, 185, 129, 0.08)', color: 'var(--win-color)', border: '1px solid rgba(16, 185, 129, 0.15)', fontSize: '0.75rem', fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: '0.25rem' }}>
@@ -306,7 +422,7 @@ export default async function AchievementsPage() {
         </div>
 
         {/* El Speedrunner */}
-        <div className="glass-panel" style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: '1rem' }}>
+        <div className="glass-panel" style={{ padding: 'var(--card-padding)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: '1rem' }}>
           <div>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.75rem' }}>
               <span style={{ padding: '0.35rem 0.75rem', borderRadius: '6px', background: 'rgba(168, 85, 247, 0.08)', color: 'var(--accent-purple)', border: '1px solid rgba(168, 85, 247, 0.15)', fontSize: '0.75rem', fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: '0.25rem' }}>
@@ -344,7 +460,7 @@ export default async function AchievementsPage() {
         </div>
 
         {/* El Farmer del Año */}
-        <div className="glass-panel" style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: '1rem' }}>
+        <div className="glass-panel" style={{ padding: 'var(--card-padding)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: '1rem' }}>
           <div>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.75rem' }}>
               <span style={{ padding: '0.35rem 0.75rem', borderRadius: '6px', background: 'rgba(200, 170, 110, 0.08)', color: 'var(--accent-gold)', border: '1px solid rgba(200, 170, 110, 0.15)', fontSize: '0.75rem', fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: '0.25rem' }}>
@@ -382,7 +498,7 @@ export default async function AchievementsPage() {
         </div>
 
         {/* El Sacrificado */}
-        <div className="glass-panel" style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: '1rem' }}>
+        <div className="glass-panel" style={{ padding: 'var(--card-padding)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: '1rem' }}>
           <div>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.75rem' }}>
               <span style={{ padding: '0.35rem 0.75rem', borderRadius: '6px', background: 'rgba(239, 68, 68, 0.08)', color: 'var(--loss-color)', border: '1px solid rgba(239, 68, 68, 0.15)', fontSize: '0.75rem', fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: '0.25rem' }}>
@@ -425,69 +541,29 @@ export default async function AchievementsPage() {
         <Award size={20} style={{ color: 'var(--accent-cyan)' }} /> Logros Especiales del Desafío
       </h2>
 
-      <div style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
-        gap: '1.5rem',
-      }}>
-        {exampleAchievements.map((achievement) => {
-          const IconComponent = achievement.icon;
-          const isUnlocked = achievement.status === 'Desbloqueado';
-          return (
-            <div
-              key={achievement.id}
-              className="glass-panel"
-              style={{
-                padding: '1.5rem',
-                display: 'flex',
-                gap: '1.25rem',
-                opacity: isUnlocked ? 1 : 0.5,
-                border: isUnlocked ? `1px solid ${achievement.color}33` : '1px solid var(--border-normal)',
-                boxShadow: isUnlocked ? achievement.shadow : 'none',
-                transition: 'all 0.3s ease',
-              }}
-            >
-              <div style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                width: '3.5rem',
-                height: '3.5rem',
-                borderRadius: '12px',
-                background: isUnlocked ? `${achievement.color}15` : 'rgba(255, 255, 255, 0.03)',
-                color: isUnlocked ? achievement.color : 'var(--text-muted)',
-                border: isUnlocked ? `1px solid ${achievement.color}30` : '1px solid var(--border-normal)',
-                flexShrink: 0,
-              }}>
-                <IconComponent size={24} />
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', flex: 1 }}>
-                <div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.25rem' }}>
-                    <h3 style={{ fontSize: '1.15rem', fontWeight: 700, color: 'var(--text-primary)' }}>{achievement.title}</h3>
-                    <span style={{ fontSize: '0.7rem', fontWeight: 700, textTransform: 'uppercase', color: isUnlocked ? 'var(--win-color)' : 'var(--text-muted)' }}>
-                      {achievement.status}
-                    </span>
-                  </div>
-                  <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', lineHeight: 1.4, marginBottom: '0.75rem' }}>
-                    {achievement.description}
-                  </p>
-                </div>
-                {isUnlocked ? (
-                  <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', borderTop: '1px solid var(--border-normal)', paddingTop: '0.5rem', marginTop: '0.5rem' }}>
-                    Desbloqueado por: <strong style={{ color: 'var(--text-primary)' }}>{achievement.unlockedBy}</strong>
-                    <span style={{ display: 'block', fontSize: '0.7rem', color: 'var(--accent-gold)', marginTop: '0.1rem' }}>{achievement.detail}</span>
-                  </div>
-                ) : (
-                  <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', borderTop: '1px solid var(--border-normal)', paddingTop: '0.5rem', marginTop: '0.5rem', fontStyle: 'italic' }}>
-                    {achievement.detail}
-                  </div>
-                )}
-              </div>
-            </div>
-          );
-        })}
-      </div>
+      {(() => {
+        const serializedAchievements = exampleAchievements.map(ach => ({
+          id: ach.id,
+          title: ach.title,
+          description: ach.description,
+          color: ach.color,
+          shadow: ach.shadow,
+          status: ach.status,
+          winners: ach.winners.map(w => ({
+            player: {
+              id: w.player.id,
+              gameName: w.player.gameName,
+              alias: w.player.alias,
+              profileIconId: w.player.profileIconId,
+            },
+            date: w.date.toISOString(),
+            championName: w.championName,
+            detail: w.detail,
+          }))
+        }));
+
+        return <SpecialAchievementsList achievements={serializedAchievements} />;
+      })()}
     </main>
   );
 }
