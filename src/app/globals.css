@@ -1,15 +1,25 @@
 /* Google Font import falls back to Next.js font optimization, but importing here as fallback */
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap');
 @import "./tokens-web.css";
 
 :root {
   /* Color Palette mapped to design tokens */
   --bg-obsidian: var(--bg-primary);
 
+  /* Font */
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+
   /* Layout & Responsiveness Tokens */
   --card-padding: 2rem;
   --title-size-hero: 2.2rem;
   --title-size-section: 1.5rem;
+}
+
+/* Datos numéricos — LP, KDA, winrate, timestamps */
+.mono {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
 }
 
 * {
@@ -27,9 +37,9 @@ body {
   color: var(--text-primary);
   background-color: var(--bg-obsidian);
   background-image: 
-    radial-gradient(circle at 10% 20%, rgba(10, 25, 47, 0.5) 0%, transparent 45%),
-    radial-gradient(circle at 90% 80%, rgba(138, 85, 247, 0.08) 0%, transparent 45%),
-    linear-gradient(to bottom, var(--bg-obsidian), #030508);
+    radial-gradient(circle at 10% 20%, rgba(0, 15, 30, 0.5) 0%, transparent 45%),
+    radial-gradient(circle at 90% 80%, rgba(168, 85, 247, 0.08) 0%, transparent 45%),
+    linear-gradient(to bottom, var(--bg-primary), #030508);
   background-attachment: fixed;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -188,6 +198,24 @@ button, input, select {
 .nav-link-icon {
   width: 1.1rem;
   height: 1.1rem;
+}
+
+.nav-donate-btn {
+  margin-left: 0.5rem;
+  padding: 0.35rem 0.85rem;
+  border-radius: 6px;
+  background: linear-gradient(135deg, rgba(200, 170, 110, 0.15) 0%, rgba(200, 170, 110, 0.05) 100%);
+  color: var(--accent-gold);
+  font-weight: 600;
+  font-size: 0.8rem;
+  border: 1px solid rgba(200, 170, 110, 0.25);
+  transition: all 0.2s ease;
+}
+
+.nav-donate-btn:hover {
+  background: linear-gradient(135deg, rgba(200, 170, 110, 0.25) 0%, rgba(200, 170, 110, 0.1) 100%);
+  border-color: var(--accent-gold);
+  box-shadow: var(--shadow-gold);
 }
 
 /* App Containers */
