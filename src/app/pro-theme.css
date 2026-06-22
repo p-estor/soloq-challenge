@@ -479,6 +479,12 @@
   color: var(--text-muted);
 }
 
+.pro-achievements-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}
+
 .pro-section {
   display: flex;
   flex-direction: column;
