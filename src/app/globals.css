@@ -2133,3 +2133,62 @@ button, input, select {
   box-shadow: var(--shadow-neon);
   transform: translateY(-1px);
 }
+
+/* ── Player Profile Layout ───────────────────────────────────────────────── */
+.player-profile-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.player-profile-back:hover {
+  color: var(--text-primary);
+}
+
+.player-profile-header-card {
+  padding: var(--card-padding);
+  margin-bottom: 2rem;
+}
+
+.player-meta-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.player-name-container {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.player-name-stack {
+  display: flex;
+  flex-direction: column;
+}
+
+.player-name-stack .player-title-alias {
+  margin: 0;
+}
+
+.player-status-highlight {
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.player-progression-card {
+  margin-bottom: 2rem;
+}
+
+.player-perf-stats-container {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+

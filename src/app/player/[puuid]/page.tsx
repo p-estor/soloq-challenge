@@ -183,22 +183,22 @@ export default async function PlayerProfilePage({ params }: PlayerPageProps) {
   return (
     <div>
       {/* Back button */}
-      <Link href="/" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.25rem', fontSize: '0.9rem', color: 'var(--text-secondary)', marginBottom: '1.5rem', fontWeight: 600 }}>
+      <Link href="/" className="player-profile-back">
         <ChevronLeft size={16} /> Volver a la clasificación
       </Link>
 
       {/* Player Profile Header Card */}
-      <div className="glass-panel player-header" style={{ padding: 'var(--card-padding)', marginBottom: '2rem' }}>
+      <div className="glass-panel player-header player-profile-header-card">
         <FallbackImage
           src={`https://ddragon.leagueoflegends.com/cdn/16.10.1/img/profileicon/${player.profileIconId}.png`}
           alt="Profile Icon"
           className="player-big-icon"
           fallbackSrc="https://ddragon.leagueoflegends.com/cdn/16.10.1/img/profileicon/29.png"
         />
-        <div className="player-meta" style={{ flex: 1, minWidth: 0 }}>
-          <div className="player-name-row" style={{ display: 'flex', alignItems: 'center', width: '100%', gap: '1rem', flexWrap: 'wrap' }}>
-            <div style={{ display: 'flex', flexDirection: 'column' }}>
-              <h1 className="player-title-alias" style={{ margin: 0 }}>{player.alias || player.gameName}</h1>
+        <div className="player-meta player-meta-info">
+          <div className="player-name-row player-name-container">
+            <div className="player-name-stack">
+              <h1 className="player-title-alias">{player.alias || player.gameName}</h1>
               <span className="player-title-riotid">
                 {player.gameName}#{player.tagLine}
               </span>
@@ -216,7 +216,7 @@ export default async function PlayerProfilePage({ params }: PlayerPageProps) {
           <div className="player-status-row">
             <div className="status-item">
               <Award size={16} style={{ color: 'var(--accent-cyan)' }} />
-              <span>Liga Actual: <strong className="status-value-highlight">
+              <span>Liga Actual: <strong className="player-status-highlight">
                 {['MASTER', 'GRANDMASTER', 'CHALLENGER'].includes(player.tier.toUpperCase()) 
                   ? player.tier 
                   : `${translateTier(player.tier)} ${player.rank}`} ({player.leaguePoints} LP)
@@ -224,7 +224,7 @@ export default async function PlayerProfilePage({ params }: PlayerPageProps) {
             </div>
             <div className="status-item">
               <Calendar size={16} style={{ color: 'var(--accent-gold)' }} />
-              <span>Liga Inicial: <strong className="status-value-highlight">
+              <span>Liga Inicial: <strong className="player-status-highlight">
                 {['MASTER', 'GRANDMASTER', 'CHALLENGER'].includes(player.startTier.toUpperCase()) 
                   ? player.startTier 
                   : `${translateTier(player.startTier)} ${player.startRank}`} ({player.startLp} LP)
@@ -232,7 +232,7 @@ export default async function PlayerProfilePage({ params }: PlayerPageProps) {
             </div>
             <div className="status-item">
               <Swords size={16} style={{ color: 'var(--accent-purple)' }} />
-              <span>Partidas: <strong className="status-value-highlight">{totalGames} ({overallWinrate}% WR)</strong></span>
+              <span>Partidas: <strong className="player-status-highlight">{totalGames} ({overallWinrate}% WR)</strong></span>
             </div>
             {progressLp !== 0 && (
               <div className="status-item">
@@ -245,7 +245,7 @@ export default async function PlayerProfilePage({ params }: PlayerPageProps) {
       </div>
 
       {/* Progression & Rank Summary Widget */}
-      <div className="glass-panel solo-rank-card" style={{ marginBottom: '2rem' }}>
+      <div className="glass-panel solo-rank-card player-progression-card">
         <span className="solo-rank-tag">Solo</span>
         
         <div className="rank-info-header">
@@ -289,7 +289,7 @@ export default async function PlayerProfilePage({ params }: PlayerPageProps) {
         </div>
 
         {/* Performance Stats (Last 30d & Peak) */}
-        <div className="rank-performance-stats" style={{ borderBottom: 'none', paddingBottom: 0 }}>
+        <div className="rank-performance-stats player-perf-stats-container">
           <div className="performance-item">
             <span className="performance-label">Last 30d</span>
             <span className={`performance-value ${last30dLp > 0 ? 'climb-positive' : last30dLp < 0 ? 'climb-negative' : 'climb-neutral'}`}>
