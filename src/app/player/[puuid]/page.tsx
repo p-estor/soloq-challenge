@@ -7,6 +7,7 @@ import { Swords, Award, TrendingUp, Calendar, ChevronLeft } from 'lucide-react';
 import Link from 'next/link';
 import FallbackImage from '@/components/FallbackImage';
 import PlayerStatsAndMatches from '@/components/PlayerStatsAndMatches';
+import PlayerProfilePro from '@/components/PlayerProfilePro';
 
 export const revalidate = 30; // Revalidate player details every 30 seconds
 
@@ -182,7 +183,9 @@ export default async function PlayerProfilePage({ params }: PlayerPageProps) {
 
   return (
     <div>
-      {/* Back button */}
+      {/* CLASSIC WRAPPER */}
+      <div className="classic-wrapper">
+        {/* Back button */}
       <Link href="/" className="player-profile-back">
         <ChevronLeft size={16} /> Volver a la clasificación
       </Link>
@@ -308,6 +311,18 @@ export default async function PlayerProfilePage({ params }: PlayerPageProps) {
 
       {/* Dynamic matches and stats section */}
       <PlayerStatsAndMatches matches={serializedMatches} snapshots={serializedSnapshots} />
+      </div>
+
+      {/* PRO WRAPPER */}
+      <div className="pro-wrapper">
+        <PlayerProfilePro 
+          player={player}
+          matches={serializedMatches}
+          snapshots={serializedSnapshots}
+          progressLp={progressLp}
+          overallWinrate={overallWinrate}
+        />
+      </div>
     </div>
   );
 }

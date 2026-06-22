@@ -2253,11 +2253,7 @@ button, input, select {
   padding: 2.5rem !important;
 }
 
-/* Toggles de renderizado dual */
-.leaderboard-pro-wrapper { display: none; }
-[data-theme="pro"] .leaderboard-classic-wrapper { display: none !important; }
-[data-theme="pro"] .leaderboard-pro-wrapper { display: block; }
-
-
-
-
+/* Dual Render Wrappers */
+.pro-wrapper { display: none; }
+[data-theme="pro"] .classic-wrapper { display: none !important; }
+[data-theme="pro"] .pro-wrapper { display: block; }

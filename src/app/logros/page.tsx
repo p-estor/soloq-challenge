@@ -5,6 +5,7 @@ import { Trophy, Award, Skull, Clock, Flame, Zap, Shield, HelpCircle, Users, Eye
 import FallbackImage from '@/components/FallbackImage';
 import { calculateStreakWinners } from '@/lib/achievements';
 import SpecialAchievementsList from '@/components/SpecialAchievementsList';
+import AchievementsPro from '@/components/AchievementsPro';
 
 
 
@@ -281,7 +282,9 @@ export default async function AchievementsPage() {
 
   return (
     <main className="logros-page">
-      {/* Header */}
+      {/* CLASSIC WRAPPER */}
+      <div className="classic-wrapper">
+        {/* Header */}
       <div className="logros-header">
         <Link href="/" className="logros-back-link">
           ← Volver a la Clasificación
@@ -559,6 +562,43 @@ export default async function AchievementsPage() {
 
         return <SpecialAchievementsList achievements={serializedAchievements} />;
       })()}
+      </div>
+
+      {/* PRO WRAPPER */}
+      <div className="pro-wrapper">
+        {(() => {
+          const serverRecords = {
+            mostActive: mostActivePlayer ? { player: mostActivePlayer, maxGames } : null,
+            topKills: topKillsMatch ? { player: topKillsMatch.player, kills: topKillsMatch.kills, championName: topKillsMatch.championName } : null,
+            topDeathless: topDeathlessMatch ? { player: topDeathlessMatch.player, kills: topDeathlessMatch.kills, assists: topDeathlessMatch.assists, championName: topDeathlessMatch.championName } : null,
+            fastestWin: fastestWinMatch ? { player: fastestWinMatch.player, gameDuration: fastestWinMatch.gameDuration, championName: fastestWinMatch.championName } : null,
+            bestFarmer: bestFarmerMatch ? { player: bestFarmerMatch.player, maxCsPerMin, cs: bestFarmerMatch.cs, championName: bestFarmerMatch.championName } : null,
+            topDeaths: topDeathsMatch ? { player: topDeathsMatch.player, deaths: topDeathsMatch.deaths, championName: topDeathsMatch.championName } : null,
+          };
+
+          const serializedAchievements = exampleAchievements.map(ach => ({
+            id: ach.id,
+            title: ach.title,
+            description: ach.description,
+            color: ach.color,
+            shadow: ach.shadow,
+            status: ach.status,
+            winners: ach.winners.map(w => ({
+              player: {
+                id: w.player.id,
+                gameName: w.player.gameName,
+                alias: w.player.alias,
+                profileIconId: w.player.profileIconId,
+              },
+              date: w.date.toISOString(),
+              championName: w.championName,
+              detail: w.detail,
+            }))
+          }));
+
+          return <AchievementsPro serverRecords={serverRecords} achievements={serializedAchievements} />;
+        })()}
+      </div>
     </main>
   );
 }
