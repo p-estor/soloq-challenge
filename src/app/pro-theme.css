@@ -34,3 +34,116 @@
 .pro-match-dot.loss { background: var(--loss-color); }
 .pro-no-matches { color: var(--text-muted); font-size: 0.8rem; }
 .pro-empty-state { padding: 3rem; text-align: center; color: var(--text-secondary); font-size: 0.9rem; }
+
+/* Layout Dividido */
+.pro-grid-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+@media (min-width: 1024px) {
+  .pro-grid-layout {
+    grid-template-columns: 1fr 320px;
+  }
+}
+
+/* Activity Feed Pro */
+.pro-feed-column {
+  background: var(--bg-card);
+  border: 1px solid var(--border-normal);
+  border-radius: 6px;
+  overflow: hidden;
+  position: sticky;
+  top: 2rem;
+}
+
+.pro-feed-header {
+  padding: 1rem;
+  border-bottom: 1px solid var(--border-normal);
+  background: var(--bg-primary);
+}
+
+.pro-feed-header h3 {
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.pro-feed-list {
+  display: flex;
+  flex-direction: column;
+  max-height: 800px;
+  overflow-y: auto;
+}
+
+.pro-feed-item {
+  display: flex;
+  text-decoration: none;
+  border-bottom: 1px solid var(--border-normal);
+  transition: background 0.1s ease;
+  background: transparent;
+}
+
+.pro-feed-item:hover {
+  background: var(--bg-card-hover);
+}
+
+.pro-feed-item:last-child {
+  border-bottom: none;
+}
+
+.pro-feed-indicator {
+  width: 4px;
+  flex-shrink: 0;
+}
+
+.pro-feed-indicator.win { background: var(--win-color); }
+.pro-feed-indicator.loss { background: var(--loss-color); }
+.pro-feed-indicator.remake { background: var(--text-muted); }
+
+.pro-feed-content {
+  padding: 0.75rem 1rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.pro-feed-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.pro-feed-name {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.pro-feed-time {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+
+.pro-feed-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.pro-feed-champ {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.pro-feed-kda {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
