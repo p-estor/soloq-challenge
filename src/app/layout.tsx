@@ -3,6 +3,8 @@ import { Outfit } from 'next/font/google';
 import './globals.css';
 import Link from 'next/link';
 import { Trophy, Award, Swords } from 'lucide-react';
+import ThemeSwitcher from '@/components/ThemeSwitcher';
+
 
 const outfit = Outfit({
   subsets: ['latin'],
@@ -48,6 +50,20 @@ export default function RootLayout({
     <html lang="es" className={outfit.variable}>
       <head>
         <link rel="icon" href="/favicon.ico" sizes="any" />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  var savedTheme = localStorage.getItem('chupachotas-theme');
+                  if (savedTheme === 'pro') {
+                    document.documentElement.setAttribute('data-theme', 'pro');
+                  }
+                } catch (e) {}
+              })();
+            `,
+          }}
+        />
       </head>
       <body>
         <header className="main-header">
@@ -86,6 +102,10 @@ export default function RootLayout({
               >
                 ☕ Donar
               </a>
+              
+              <div style={{ marginLeft: '1rem', display: 'flex', alignItems: 'center' }}>
+                <ThemeSwitcher />
+              </div>
             </nav>
           </div>
         </header>
