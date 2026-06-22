@@ -1,7 +1,8 @@
 import React from 'react';
 import { prisma } from '@/lib/db';
 import { getGlobalLp } from '@/lib/riot';
-import LeaderboardTable, { ProcessedPlayer } from '@/components/LeaderboardTable';
+import LeaderboardTable, { ProcessedPlayer, ProcessedMatch } from '@/components/LeaderboardTable';
+import LeaderboardPro from '@/components/LeaderboardPro';
 import { Users, Swords, TrendingUp } from 'lucide-react';
 import Link from 'next/link';
 import FallbackImage from '@/components/FallbackImage';
@@ -260,8 +261,13 @@ export default async function LeaderboardPage() {
 
       </div>
 
-      {/* Main split grid containing Leaderboard & Activity Feed */}
-      <LeaderboardTable players={processedPlayers} matches={processedMatches} />
+      {/* Sistema de renderizado dual basado en CSS wrappers */}
+      <div className="leaderboard-classic-wrapper">
+        <LeaderboardTable players={processedPlayers} matches={processedMatches} />
+      </div>
+      <div className="leaderboard-pro-wrapper">
+        <LeaderboardPro players={processedPlayers} matches={processedMatches} />
+      </div>
     </div>
 
     {/* Footer */}
