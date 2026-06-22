@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Skull, Zap, Flame, Shield, Eye, EyeOff } from 'lucide-react';
 import FallbackImage from '@/components/FallbackImage';
 
@@ -40,6 +40,16 @@ const IconMap: Record<string, React.ComponentType<{ size?: number }>> = {
 };
 
 export default function SpecialAchievementsList({ achievements }: Props) {
+  const [isPro, setIsPro] = useState(false);
+  useEffect(() => {
+    const checkTheme = () =>
+      setIsPro(document.documentElement.getAttribute('data-theme') === 'pro');
+    checkTheme();
+    const observer = new MutationObserver(checkTheme);
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+    return () => observer.disconnect();
+  }, []);
+
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('es-ES', {
       day: 'numeric',
@@ -90,8 +100,8 @@ export default function SpecialAchievementsList({ achievements }: Props) {
               flexDirection: 'column',
               gap: '1.25rem',
               opacity: isUnlocked ? 1 : 0.5,
-              border: isUnlocked ? `1px solid ${achievement.color}33` : '1px solid var(--border-normal)',
-              boxShadow: isUnlocked ? achievement.shadow : 'none',
+              border: isPro ? '1px solid var(--border-normal)' : (isUnlocked ? `1px solid ${achievement.color}33` : '1px solid var(--border-normal)'),
+              boxShadow: isPro ? 'none' : (isUnlocked ? achievement.shadow : 'none'),
               transition: 'all 0.3s ease',
               '--hover-border-color': achievement.color,
               '--hover-shadow': achievement.shadow,
@@ -106,9 +116,9 @@ export default function SpecialAchievementsList({ achievements }: Props) {
                 width: '3.5rem',
                 height: '3.5rem',
                 borderRadius: '12px',
-                background: isUnlocked ? `${achievement.color}15` : 'rgba(255, 255, 255, 0.03)',
+                background: isPro ? 'rgba(255, 255, 255, 0.05)' : (isUnlocked ? `${achievement.color}15` : 'rgba(255, 255, 255, 0.03)'),
                 color: isUnlocked ? achievement.color : 'var(--text-muted)',
-                border: isUnlocked ? `1px solid ${achievement.color}30` : '1px solid var(--border-normal)',
+                border: isPro ? '1px solid var(--border-normal)' : (isUnlocked ? `1px solid ${achievement.color}30` : '1px solid var(--border-normal)'),
                 flexShrink: 0,
               }}>
                 <IconComponent size={24} />
