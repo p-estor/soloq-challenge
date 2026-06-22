@@ -65,3 +65,33 @@
   --shadow-gold: 0 0 20px rgba(200, 170, 110, 0.2);
   --blur-glass: blur(12px);
 }
+
+/* ============================================================
+   Tema "Pro" (Analítica minimalista, estilo dpm.lol)
+   ============================================================ */
+[data-theme="pro"] {
+  /* Fondos mate, sin tintes azules */
+  --bg-primary: #09090b;
+  --bg-deep: #000000;
+  --bg-card: #141417;
+  --bg-card-hover: #1c1c21;
+
+  /* Bordes invisibles o extremadamente tenues */
+  --border-normal: rgba(255, 255, 255, 0.03);
+  --border-glow: rgba(255, 255, 255, 0.08);
+
+  /* Texto de muy alto contraste */
+  --text-primary: #fafafa;
+  --text-secondary: #a1a1aa;
+  --text-muted: #52525b;
+
+  /* Acentos desaturados */
+  --accent-cyan: #3b82f6; /* Cambiamos el cyan neón por un azul cobalto profesional */
+  --accent-purple: #8b5cf6;
+  
+  /* Sombras y blur anulados para máxima limpieza visual */
+  --shadow-neon: 0 4px 20px rgba(0, 0, 0, 0.5);
+  --shadow-gold: 0 4px 20px rgba(0, 0, 0, 0.5);
+  --blur-glass: blur(0px);
+}
+

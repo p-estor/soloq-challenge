@@ -2192,3 +2192,28 @@ button, input, select {
   padding-bottom: 0;
 }
 
+/* ============================================================
+   Ajustes Estructurales Tema Pro
+   ============================================================ */
+[data-theme="pro"] .glass-panel {
+  border: none;
+  box-shadow: none !important;
+}
+
+[data-theme="pro"] .nav-container {
+  border-bottom: 1px solid var(--border-normal);
+  background: var(--bg-primary);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+[data-theme="pro"] .leaderboard-row {
+  border-bottom: 1px solid var(--border-normal) !important;
+  background: transparent !important;
+}
+
+[data-theme="pro"] .leaderboard-row:hover {
+  background: var(--bg-card-hover) !important;
+}
+
+
