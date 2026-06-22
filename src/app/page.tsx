@@ -2,7 +2,7 @@ import React from 'react';
 import { prisma } from '@/lib/db';
 import { getGlobalLp } from '@/lib/riot';
 import LeaderboardTable, { ProcessedPlayer } from '@/components/LeaderboardTable';
-import { Users, Swords, Crown, TrendingUp, Zap, Clock } from 'lucide-react';
+import { Users, Swords, TrendingUp } from 'lucide-react';
 import Link from 'next/link';
 import FallbackImage from '@/components/FallbackImage';
 import Countdown from '@/components/Countdown';
@@ -163,72 +163,101 @@ export default async function LeaderboardPage() {
         badgeText="7 de Julio, 2026 - 23:59"
       />
 
-      {/* Standings Dashboard Header Cards */}
-      <div className="stats-grid">
+      {/* Hero Stats Section */}
+      <div className="hero-stats-section">
 
-        <div className="glass-panel stat-card">
-          <div className="stat-icon-wrapper">
-            <Users size={20} />
-          </div>
-          <div className="stat-info">
-            <span className="stat-label">Participantes</span>
-            <span className="stat-value">{processedPlayers.length}</span>
-          </div>
-        </div>
-
-        <div className="glass-panel stat-card">
-          <div className="stat-icon-wrapper">
-            <Swords size={20} />
-          </div>
-          <div className="stat-info">
-            <span className="stat-label">Partidas Jugadas</span>
-            <span className="stat-value">{totalMatchesCount}</span>
-          </div>
-        </div>
-
-        <div className="glass-panel stat-card gold-themed">
-          <div className="stat-icon-wrapper">
-            <Crown size={20} />
-          </div>
-          <div className="stat-info" style={{ minWidth: 0 }}>
-            <span className="stat-label">Líder Actual</span>
-            <span className="stat-value" style={{ fontSize: '1.2rem', minWidth: 0 }}>
-              {topRankPlayer ? (
-                <>
-                  <span className="stat-value-name">{topRankPlayer.alias || topRankPlayer.gameName}</span>
-                  <span style={{ display: 'block', fontSize: '0.8rem', color: 'var(--accent-gold)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                    {['MASTER', 'GRANDMASTER', 'CHALLENGER'].includes(topRankPlayer.tier.toUpperCase()) 
-                      ? topRankPlayer.tier 
-                      : `${translateTier(topRankPlayer.tier)} ${topRankPlayer.rank}`}
+        {/* Leader Hero Card */}
+        <div className="glass-panel leader-hero-card">
+          <div className="leader-hero-tag">👑 Líder Actual</div>
+          {topRankPlayer ? (
+            <div className="leader-hero-body">
+              <FallbackImage
+                src={`https://ddragon.leagueoflegends.com/cdn/16.12.1/img/profileicon/${topRankPlayer.profileIconId}.png`}
+                alt={topRankPlayer.alias || topRankPlayer.gameName}
+                width={72}
+                height={72}
+                className="leader-hero-icon"
+                fallbackSrc="https://ddragon.leagueoflegends.com/cdn/16.12.1/img/profileicon/29.png"
+              />
+              <div className="leader-hero-info">
+                <div className="leader-hero-name">
+                  {topRankPlayer.alias || topRankPlayer.gameName}
+                </div>
+                <div className="leader-hero-riotid">
+                  {topRankPlayer.gameName}#{topRankPlayer.tagLine}
+                </div>
+                <div className="leader-hero-rank">
+                  {['MASTER', 'GRANDMASTER', 'CHALLENGER'].includes(topRankPlayer.tier.toUpperCase())
+                    ? topRankPlayer.tier
+                    : `${translateTier(topRankPlayer.tier)} ${topRankPlayer.rank}`}
+                  {' · '}
+                  <span className="leader-hero-lp mono">{topRankPlayer.leaguePoints} LP</span>
+                </div>
+              </div>
+              <div className="leader-hero-stats">
+                <div className="leader-hero-stat">
+                  <span className="leader-stat-label">Progreso</span>
+                  <span className={`leader-stat-value mono ${topRankPlayer.progressLp >= 0 ? 'climb-positive' : 'climb-negative'}`}>
+                    {topRankPlayer.progressLp >= 0 ? '+' : ''}{topRankPlayer.progressLp} LP
                   </span>
-                </>
-              ) : (
-                'Nadie'
-              )}
-            </span>
+                </div>
+                <div className="leader-hero-stat">
+                  <span className="leader-stat-label">Récord</span>
+                  <span className="leader-stat-value mono">
+                    <span style={{ color: 'var(--win-color)' }}>{topRankPlayer.wins}V</span>
+                    {' '}
+                    <span style={{ color: 'var(--loss-color)' }}>{topRankPlayer.losses}D</span>
+                  </span>
+                </div>
+                <div className="leader-hero-stat">
+                  <span className="leader-stat-label">Winrate</span>
+                  <span className="leader-stat-value mono">{topRankPlayer.winrate}%</span>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div className="leader-hero-empty">Sin datos del líder</div>
+          )}
+        </div>
+
+        {/* Mini Stats Column */}
+        <div className="mini-stats-column">
+          <div className="glass-panel mini-stat-card">
+            <div className="stat-icon-wrapper"><Users size={18} /></div>
+            <div className="stat-info">
+              <span className="stat-label">Participantes</span>
+              <span className="stat-value mono">{processedPlayers.length}</span>
+            </div>
+          </div>
+
+          <div className="glass-panel mini-stat-card">
+            <div className="stat-icon-wrapper"><Swords size={18} /></div>
+            <div className="stat-info">
+              <span className="stat-label">Partidas Jugadas</span>
+              <span className="stat-value mono">{totalMatchesCount}</span>
+            </div>
+          </div>
+
+          <div className="glass-panel mini-stat-card">
+            <div className="stat-icon-wrapper" style={{ color: 'var(--win-color)', borderColor: 'rgba(16,185,129,0.3)' }}>
+              <TrendingUp size={18} />
+            </div>
+            <div className="stat-info" style={{ minWidth: 0 }}>
+              <span className="stat-label">Máx. Escalador</span>
+              <span className="stat-value" style={{ fontSize: '1rem', minWidth: 0 }}>
+                {topClimber && topClimber.progressLp > 0 ? (
+                  <>
+                    <span className="stat-value-name">{topClimber.alias || topClimber.gameName}</span>
+                    <span className="mono" style={{ display: 'block', fontSize: '0.8rem', color: 'var(--win-color)' }}>
+                      +{topClimber.progressLp} LP
+                    </span>
+                  </>
+                ) : 'Nadie'}
+              </span>
+            </div>
           </div>
         </div>
 
-        <div className="glass-panel stat-card">
-          <div className="stat-icon-wrapper" style={{ color: 'var(--win-color)', borderColor: 'rgba(16,185,129,0.3)' }}>
-            <TrendingUp size={20} />
-          </div>
-          <div className="stat-info" style={{ minWidth: 0 }}>
-            <span className="stat-label">Máximo Escalador</span>
-            <span className="stat-value" style={{ fontSize: '1.2rem', minWidth: 0 }}>
-              {topClimber && topClimber.progressLp > 0 ? (
-                <>
-                  <span className="stat-value-name">{topClimber.alias || topClimber.gameName}</span>
-                  <span style={{ display: 'block', fontSize: '0.8rem', color: 'var(--win-color)' }}>
-                    +{topClimber.progressLp} LP
-                  </span>
-                </>
-              ) : (
-                'Nadie'
-              )}
-            </span>
-          </div>
-        </div>
       </div>
 
       {/* Main split grid containing Leaderboard & Activity Feed */}
