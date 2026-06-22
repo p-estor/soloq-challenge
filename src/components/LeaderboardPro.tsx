@@ -153,14 +153,22 @@ export default function LeaderboardPro({ players, matches }: LeaderboardProProps
                 className="pro-feed-item"
               >
                 <div className={`pro-feed-indicator ${match.isRemake ? 'remake' : match.win ? 'win' : 'loss'}`} />
+                <FallbackImage
+                  src={`https://ddragon.leagueoflegends.com/cdn/16.12.1/img/champion/${match.championName}.png`}
+                  alt={match.championName}
+                  className="pro-feed-champ-icon"
+                  fallbackSrc="https://ddragon.leagueoflegends.com/cdn/16.12.1/img/profileicon/29.png"
+                />
                 <div className="pro-feed-content">
                   <div className="pro-feed-top">
                     <span className="pro-feed-name">{match.player.alias || match.player.gameName}</span>
-                    <span className="pro-feed-time">{timeAgo(match.gameCreation)}</span>
+                    <span className={`pro-feed-badge ${match.isRemake ? 'remake' : match.win ? 'win' : 'loss'}`}>
+                      {match.isRemake ? 'R' : match.win ? 'V' : 'D'}
+                    </span>
                   </div>
                   <div className="pro-feed-bottom">
                     <span className="pro-feed-champ">{match.championName}</span>
-                    <span className="pro-feed-kda mono">{match.kills}/{match.deaths}/{match.assists}</span>
+                    <span className="pro-feed-time">{timeAgo(match.gameCreation)}</span>
                   </div>
                 </div>
               </a>
