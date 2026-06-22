@@ -2094,3 +2094,19 @@ button, input, select {
   gap: 0.85rem;
   flex: 1;
 }
+
+/* ── Footer ──────────────────────────────────────────────────────────────── */
+.main-footer {
+  text-align: center;
+  margin-top: 4rem;
+  padding: 2rem 0;
+  border-top: 1px solid var(--border-normal);
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  line-height: 1.6;
+}
+.footer-credits {
+  font-size: 0.8rem;
+  margin-top: 0.25rem;
+  opacity: 0.7;
+}
