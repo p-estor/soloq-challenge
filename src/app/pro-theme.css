@@ -167,4 +167,111 @@
 .pro-feed-badge.loss { background: rgba(239, 68, 68, 0.15); color: var(--loss-color); }
 .pro-feed-badge.remake { background: rgba(255,255,255,0.05); color: var(--text-muted); }
 
+/* ============================================================
+   Player Profile — Pro Mode
+   ============================================================ */
+
+/* Header: transparente y plano, solo separador inferior */
+[data-theme="pro"] .glass-panel.player-header {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  border-bottom: 1px solid var(--border-normal) !important;
+}
+
+/* Quitar gradiente del nombre del jugador */
+[data-theme="pro"] .player-title-alias {
+  -webkit-text-fill-color: var(--text-primary) !important;
+  background: none !important;
+}
+
+/* Rank card: sólido, sin sombra */
+[data-theme="pro"] .glass-panel.solo-rank-card {
+  border-radius: 6px !important;
+  box-shadow: none !important;
+}
+
+/* Barra de progreso: sin glow */
+[data-theme="pro"] .rank-progress-fill {
+  background: var(--accent-cyan) !important;
+  box-shadow: none !important;
+}
+
+[data-theme="pro"] .rank-progress-track {
+  background: var(--bg-primary) !important;
+  box-shadow: none !important;
+}
+
+[data-theme="pro"] .rank-progress-step.active .rank-progress-label,
+[data-theme="pro"] .rank-progress-step.completed .rank-progress-label {
+  text-shadow: none !important;
+  color: var(--accent-cyan) !important;
+}
+
+/* Widget cards de matches y campeones: planos */
+[data-theme="pro"] .glass-panel.player-matches-card,
+[data-theme="pro"] .glass-panel.widget-card {
+  border-radius: 6px !important;
+  box-shadow: none !important;
+}
+
+/* Match cards: filas planas con borde lateral de color */
+[data-theme="pro"] .player-match-card {
+  background: transparent !important;
+  border: none !important;
+  border-bottom: 1px solid var(--border-normal) !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+[data-theme="pro"] .player-match-card:last-child {
+  border-bottom: none !important;
+}
+
+/* Bordes de resultado: sin glow */
+[data-theme="pro"] .match-win-border {
+  box-shadow: none !important;
+}
+
+[data-theme="pro"] .match-loss-border {
+  box-shadow: none !important;
+}
+
+/* ============================================================
+   Logros Page — Pro Mode
+   ============================================================ */
+
+/* Quitar gradiente del título */
+[data-theme="pro"] .logros-title {
+  background: none !important;
+  -webkit-background-clip: unset !important;
+  -webkit-text-fill-color: var(--text-primary) !important;
+}
+
+/* Section titles: minimalistas */
+[data-theme="pro"] .logros-section-title {
+  font-size: 0.85rem !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.07em !important;
+  color: var(--text-secondary) !important;
+  border-bottom-color: var(--border-normal) !important;
+}
+
+/* Records grid: cards planas */
+[data-theme="pro"] .logros-records-grid .glass-panel {
+  border-radius: 6px !important;
+  box-shadow: none !important;
+}
+
+/* Achievement cards: planas, sin sombra de color personalizada */
+[data-theme="pro"] .glass-panel.achievement-card,
+[data-theme="pro"] .logros-achievements-grid .glass-panel {
+  border-radius: 6px !important;
+  box-shadow: none !important;
+  border-color: var(--border-normal) !important;
+}
+
+
 

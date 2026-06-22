@@ -280,31 +280,26 @@ export default async function AchievementsPage() {
 
 
   return (
-    <main style={{ maxWidth: '1200px', margin: '0 auto', padding: '1rem 0', color: 'var(--text-primary)' }}>
+    <main className="logros-page">
       {/* Header */}
-      <div style={{ marginBottom: '2.5rem', textAlign: 'center' }}>
-        <Link href="/" style={{ color: 'var(--accent-cyan)', fontSize: '0.9rem', display: 'inline-flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem', transition: 'opacity 0.2s' }}>
+      <div className="logros-header">
+        <Link href="/" className="logros-back-link">
           ← Volver a la Clasificación
         </Link>
-        <h1 style={{ fontSize: '2.5rem', fontWeight: 800, background: 'linear-gradient(to right, var(--text-primary), var(--accent-cyan))', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', letterSpacing: '-0.02em', marginBottom: '0.5rem' }}>
+        <h1 className="logros-title">
           Sala de Logros e Hitos
         </h1>
-        <p style={{ color: 'var(--text-secondary)', fontSize: '1.05rem', maxWidth: '600px', margin: '0 auto' }}>
+        <p className="logros-subtitle">
           Récords históricos del SoloQ Challenge calculados en tiempo real y hazañas épicas de los invocadores.
         </p>
       </div>
 
       {/* Grid: Récords del Servidor */}
-      <h2 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '1.25rem', borderBottom: '1px solid var(--border-normal)', paddingBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+      <h2 className="logros-section-title">
         <Trophy size={20} style={{ color: 'var(--accent-gold)' }} /> Récords del Servidor (Tiempo Real)
       </h2>
 
-      <div style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 320px), 1fr))',
-        gap: '1.5rem',
-        marginBottom: '4rem'
-      }}>
+      <div className="logros-records-grid">
         {/* El más viciado */}
         <div className="glass-panel" style={{ padding: 'var(--card-padding)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: '1rem' }}>
           <div>
@@ -537,7 +532,7 @@ export default async function AchievementsPage() {
       </div>
 
       {/* Grid: Logros Ficticios/Ejemplo */}
-      <h2 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '1.25rem', borderBottom: '1px solid var(--border-normal)', paddingBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+      <h2 className="logros-section-title">
         <Award size={20} style={{ color: 'var(--accent-cyan)' }} /> Logros Especiales del Desafío
       </h2>
 
