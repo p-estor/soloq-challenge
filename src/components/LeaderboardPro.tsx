@@ -162,13 +162,16 @@ export default function LeaderboardPro({ players, matches }: LeaderboardProProps
                 <div className="pro-feed-content">
                   <div className="pro-feed-top">
                     <span className="pro-feed-name">{match.player.alias || match.player.gameName}</span>
-                    <span className={`pro-feed-badge ${match.isRemake ? 'remake' : match.win ? 'win' : 'loss'}`}>
-                      {match.isRemake ? 'R' : match.win ? 'V' : 'D'}
-                    </span>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                      <span className="pro-feed-time">{timeAgo(match.gameCreation)}</span>
+                      <span className={`pro-feed-badge ${match.isRemake ? 'remake' : match.win ? 'win' : 'loss'}`}>
+                        {match.isRemake ? 'R' : match.win ? 'V' : 'D'}
+                      </span>
+                    </div>
                   </div>
                   <div className="pro-feed-bottom">
                     <span className="pro-feed-champ">{match.championName}</span>
-                    <span className="pro-feed-time">{timeAgo(match.gameCreation)}</span>
+                    <span className="pro-feed-kda mono">{match.kills}/{match.deaths}/{match.assists}</span>
                   </div>
                 </div>
               </a>
