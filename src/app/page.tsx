@@ -262,10 +262,10 @@ export default async function LeaderboardPage() {
       </div>
 
       {/* Sistema de renderizado dual basado en CSS wrappers */}
-      <div className="leaderboard-classic-wrapper">
+      <div className="classic-wrapper">
         <LeaderboardTable players={processedPlayers} matches={processedMatches} />
       </div>
-      <div className="leaderboard-pro-wrapper">
+      <div className="pro-wrapper">
         <LeaderboardPro players={processedPlayers} matches={processedMatches} />
       </div>
     </div>
