@@ -207,21 +207,6 @@ export default async function PlayerProfilePage({ params }: PlayerPageProps) {
               href={`${process.env.NEXT_PUBLIC_TRACKER_URL || 'http://localhost:5173'}/euw/${player.gameName}-${player.tagLine}`}
               target="_blank"
               rel="noopener noreferrer"
-              style={{
-                marginLeft: 'auto',
-                padding: '0.5rem 1rem',
-                backgroundColor: 'rgba(0, 242, 254, 0.1)',
-                border: '1px solid rgba(0, 242, 254, 0.3)',
-                borderRadius: '6px',
-                color: 'var(--accent-cyan)',
-                fontSize: '0.85rem',
-                fontWeight: 700,
-                textDecoration: 'none',
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '0.5rem',
-                transition: 'all 0.2s ease',
-              }}
               className="rift-tracker-redirect-btn"
             >
               🔍 Análisis Detallado (chupachotas.tracker)

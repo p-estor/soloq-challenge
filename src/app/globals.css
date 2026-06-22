@@ -2110,3 +2110,26 @@ button, input, select {
   margin-top: 0.25rem;
   opacity: 0.7;
 }
+
+/* ── Tracker redirect button ─────────────────────────────────────────────── */
+.rift-tracker-redirect-btn {
+  margin-left: auto;
+  padding: 0.5rem 1rem;
+  background: rgba(0, 210, 255, 0.08);
+  border: 1px solid rgba(0, 210, 255, 0.25);
+  border-radius: 6px;
+  color: var(--accent-cyan);
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.2s ease;
+}
+.rift-tracker-redirect-btn:hover {
+  background: rgba(0, 210, 255, 0.15);
+  border-color: var(--accent-cyan);
+  box-shadow: var(--shadow-neon);
+  transform: translateY(-1px);
+}
