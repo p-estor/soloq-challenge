@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { Outfit } from 'next/font/google';
 import './globals.css';
 import Link from 'next/link';
-import { Trophy, ShieldAlert, Award, Swords } from 'lucide-react';
+import { Trophy, Award, Swords } from 'lucide-react';
 
 const outfit = Outfit({
   subsets: ['latin'],
@@ -94,9 +94,9 @@ export default function RootLayout({
           {children}
         </main>
         
-        <footer className="main-footer" style={{ textAlign: 'center', marginTop: '4rem', padding: '2rem 0', borderTop: '1px solid var(--border-normal)', color: 'var(--text-muted)', fontSize: '0.85rem', lineHeight: '1.6' }}>
+        <footer className="main-footer">
           <p>© {new Date().getFullYear()} Chupachotas SoloQ Challenge. Todos los derechos reservados.</p>
-          <p className="footer-credits" style={{ color: 'var(--text-muted)', fontSize: '0.8rem', marginTop: '0.25rem' }}>Desarrollado con pasión para League of Legends EUW</p>
+          <p className="footer-credits">Desarrollado con pasión para League of Legends EUW</p>
         </footer>
       </body>
     </html>
