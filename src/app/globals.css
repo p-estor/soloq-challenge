@@ -1935,17 +1935,6 @@ button, input, select {
   }
 }
 
-.nav-donate-btn:hover {
-  transform: translateY(-1px);
-  filter: brightness(1.1);
-  box-shadow: 0 4px 12px rgba(0, 121, 193, 0.5) !important;
-}
-
-.donate-card-btn:hover {
-  transform: translateY(-1px);
-  filter: brightness(1.1);
-  box-shadow: 0 6px 16px rgba(0, 121, 193, 0.4) !important;
-}
 
 /* ── Tipografía mono: datos numéricos ───────────────────────────────────── */
 .rank-lp,
