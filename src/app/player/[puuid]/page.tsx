@@ -1,7 +1,7 @@
 import React from 'react';
 import { notFound } from 'next/navigation';
 import { prisma } from '@/lib/db';
-import { getGlobalLp } from '@/lib/riot';
+import { getGlobalLp, DDRAGON_VERSION } from '@/lib/riot';
 import TierIcon from '@/components/TierIcon';
 import { Swords, Award, TrendingUp, Calendar, ChevronLeft } from 'lucide-react';
 import Link from 'next/link';
@@ -193,10 +193,10 @@ export default async function PlayerProfilePage({ params }: PlayerPageProps) {
       {/* Player Profile Header Card */}
       <div className="glass-panel player-header player-profile-header-card">
         <FallbackImage
-          src={`https://ddragon.leagueoflegends.com/cdn/16.10.1/img/profileicon/${player.profileIconId}.png`}
+          src={`https://ddragon.leagueoflegends.com/cdn/${DDRAGON_VERSION}/img/profileicon/${player.profileIconId}.png`}
           alt="Profile Icon"
           className="player-big-icon"
-          fallbackSrc="https://ddragon.leagueoflegends.com/cdn/16.10.1/img/profileicon/29.png"
+          fallbackSrc={`https://ddragon.leagueoflegends.com/cdn/${DDRAGON_VERSION}/img/profileicon/29.png`}
         />
         <div className="player-meta player-meta-info">
           <div className="player-name-row player-name-container">

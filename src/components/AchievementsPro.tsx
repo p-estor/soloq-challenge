@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { Trophy, Award, Skull, Clock, Flame, Zap, Shield, HelpCircle, Users, Eye, EyeOff, LucideIcon } from 'lucide-react';
 import FallbackImage from './FallbackImage';
+import { DDRAGON_VERSION } from '@/lib/riot';
 
 interface PlayerInfo {
   id: string;
@@ -80,10 +81,10 @@ export default function AchievementsPro({ serverRecords, achievements }: Achieve
         {player ? (
           <div className="pro-record-player">
             <FallbackImage
-              src={`https://ddragon.leagueoflegends.com/cdn/16.10.1/img/profileicon/${player.profileIconId}.png`}
+              src={`https://ddragon.leagueoflegends.com/cdn/${DDRAGON_VERSION}/img/profileicon/${player.profileIconId}.png`}
               alt={player.gameName}
               className="pro-record-avatar"
-              fallbackSrc="https://ddragon.leagueoflegends.com/cdn/16.10.1/img/profileicon/29.png"
+              fallbackSrc={`https://ddragon.leagueoflegends.com/cdn/${DDRAGON_VERSION}/img/profileicon/29.png`}
             />
             <div className="pro-record-player-meta">
               <span className="pro-record-name">{player.alias || player.gameName}</span>
@@ -91,10 +92,10 @@ export default function AchievementsPro({ serverRecords, achievements }: Achieve
             </div>
             {championName && (
               <FallbackImage
-                src={`https://ddragon.leagueoflegends.com/cdn/16.10.1/img/champion/${championName}.png`}
+                src={`https://ddragon.leagueoflegends.com/cdn/${DDRAGON_VERSION}/img/champion/${championName}.png`}
                 alt={championName}
                 className="pro-record-champ"
-                fallbackSrc="https://ddragon.leagueoflegends.com/cdn/16.10.1/img/profileicon/29.png"
+                fallbackSrc={`https://ddragon.leagueoflegends.com/cdn/${DDRAGON_VERSION}/img/profileicon/29.png`}
               />
             )}
           </div>
@@ -213,10 +214,10 @@ export default function AchievementsPro({ serverRecords, achievements }: Achieve
                             {ach.winners.slice(0, 3).map((w, idx) => (
                               <FallbackImage
                                 key={idx}
-                                src={`https://ddragon.leagueoflegends.com/cdn/16.10.1/img/champion/${w.championName}.png`}
+                                src={`https://ddragon.leagueoflegends.com/cdn/${DDRAGON_VERSION}/img/champion/${w.championName}.png`}
                                 alt={w.championName}
                                 className="pro-winner-mini-icon"
-                                fallbackSrc="https://ddragon.leagueoflegends.com/cdn/16.10.1/img/profileicon/29.png"
+                                fallbackSrc={`https://ddragon.leagueoflegends.com/cdn/${DDRAGON_VERSION}/img/profileicon/29.png`}
                               />
                             ))}
                             {ach.winners.length > 3 && <span className="pro-winners-more">+{ach.winners.length - 3}</span>}
@@ -233,10 +234,10 @@ export default function AchievementsPro({ serverRecords, achievements }: Achieve
                           {ach.winners.map((w, idx) => (
                             <div key={idx} className="pro-winner-card">
                               <FallbackImage
-                                src={`https://ddragon.leagueoflegends.com/cdn/16.10.1/img/champion/${w.championName}.png`}
+                                src={`https://ddragon.leagueoflegends.com/cdn/${DDRAGON_VERSION}/img/champion/${w.championName}.png`}
                                 alt={w.championName}
                                 className="pro-winner-card-champ"
-                                fallbackSrc="https://ddragon.leagueoflegends.com/cdn/16.10.1/img/profileicon/29.png"
+                                fallbackSrc={`https://ddragon.leagueoflegends.com/cdn/${DDRAGON_VERSION}/img/profileicon/29.png`}
                               />
                               <div className="pro-winner-card-info">
                                 <span className="pro-winner-card-name">{w.player.alias || w.player.gameName}</span>

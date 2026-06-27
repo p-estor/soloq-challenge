@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { Skull, Zap, Flame, Shield, Eye, EyeOff } from 'lucide-react';
 import FallbackImage from '@/components/FallbackImage';
+import { DDRAGON_VERSION } from '@/lib/riot';
 
 interface Winner {
   player: {
@@ -159,12 +160,12 @@ export default function SpecialAchievementsList({ achievements }: Props) {
                   {firstWinner ? (
                     <>
                       <FallbackImage
-                        src={`https://ddragon.leagueoflegends.com/cdn/16.10.1/img/champion/${firstWinner.championName}.png`}
+                        src={`https://ddragon.leagueoflegends.com/cdn/${DDRAGON_VERSION}/img/champion/${firstWinner.championName}.png`}
                         alt={firstWinner.championName}
                         width={32}
                         height={32}
                         style={{ borderRadius: '50%', border: `1.5px solid ${achievement.color}` }}
-                        fallbackSrc="https://ddragon.leagueoflegends.com/cdn/16.10.1/img/profileicon/29.png"
+                        fallbackSrc={`https://ddragon.leagueoflegends.com/cdn/${DDRAGON_VERSION}/img/profileicon/29.png`}
                       />
                       <div style={{ flex: 1, minWidth: 0 }}>
                         <div style={{ fontWeight: 700, fontSize: '0.85rem', color: 'var(--text-primary)', textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }}>
@@ -233,12 +234,12 @@ export default function SpecialAchievementsList({ achievements }: Props) {
                           flexShrink: 0,
                         }}>
                           <FallbackImage
-                            src={`https://ddragon.leagueoflegends.com/cdn/16.10.1/img/champion/${winner.championName}.png`}
+                            src={`https://ddragon.leagueoflegends.com/cdn/${DDRAGON_VERSION}/img/champion/${winner.championName}.png`}
                             alt={winner.championName}
                             width={32}
                             height={32}
                             style={{ borderRadius: '50%', border: '1.5px solid var(--border-normal)' }}
-                            fallbackSrc="https://ddragon.leagueoflegends.com/cdn/16.10.1/img/profileicon/29.png"
+                            fallbackSrc={`https://ddragon.leagueoflegends.com/cdn/${DDRAGON_VERSION}/img/profileicon/29.png`}
                           />
                           <div style={{ flex: 1, minWidth: 0 }}>
                             <div style={{ fontWeight: 700, fontSize: '0.85rem', color: 'var(--text-primary)', textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }}>

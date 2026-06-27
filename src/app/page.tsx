@@ -1,6 +1,6 @@
 import React from 'react';
 import { prisma } from '@/lib/db';
-import { getGlobalLp } from '@/lib/riot';
+import { getGlobalLp, DDRAGON_VERSION } from '@/lib/riot';
 import LeaderboardTable, { ProcessedPlayer, ProcessedMatch } from '@/components/LeaderboardTable';
 import LeaderboardPro from '@/components/LeaderboardPro';
 import { Users, Swords, TrendingUp } from 'lucide-react';
@@ -173,12 +173,12 @@ export default async function LeaderboardPage() {
           {topRankPlayer ? (
             <div className="leader-hero-body">
               <FallbackImage
-                src={`https://ddragon.leagueoflegends.com/cdn/16.12.1/img/profileicon/${topRankPlayer.profileIconId}.png`}
+                src={`https://ddragon.leagueoflegends.com/cdn/${DDRAGON_VERSION}/img/profileicon/${topRankPlayer.profileIconId}.png`}
                 alt={topRankPlayer.alias || topRankPlayer.gameName}
                 width={72}
                 height={72}
                 className="leader-hero-icon"
-                fallbackSrc="https://ddragon.leagueoflegends.com/cdn/16.12.1/img/profileicon/29.png"
+                fallbackSrc={`https://ddragon.leagueoflegends.com/cdn/${DDRAGON_VERSION}/img/profileicon/29.png`}
               />
               <div className="leader-hero-info">
                 <div className="leader-hero-name">
