@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { Search, Flame, Snowflake, Award, Zap, Swords, Clock } from 'lucide-react';
 import TierIcon from './TierIcon';
 import FallbackImage from './FallbackImage';
+import { DDRAGON_VERSION } from '@/lib/riot';
 
 // Translate rank tiers to Spanish
 function translateTier(tier: string): string {
@@ -251,11 +252,11 @@ export default function LeaderboardTable({ players, matches }: LeaderboardTableP
                             <div className="player-info-cell">
                               <div className="summoner-icon-container">
                                 <img
-                                  src={`https://ddragon.leagueoflegends.com/cdn/16.10.1/img/profileicon/${player.profileIconId}.png`}
+                                  src={`https://ddragon.leagueoflegends.com/cdn/${DDRAGON_VERSION}/img/profileicon/${player.profileIconId}.png`}
                                   alt="Profile Icon"
                                   className="summoner-icon"
                                   onError={(e) => {
-                                    (e.target as HTMLImageElement).src = 'https://ddragon.leagueoflegends.com/cdn/16.10.1/img/profileicon/29.png';
+                                    (e.target as HTMLImageElement).src = `https://ddragon.leagueoflegends.com/cdn/${DDRAGON_VERSION}/img/profileicon/29.png`;
                                   }}
                                 />
                               </div>
@@ -326,11 +327,11 @@ export default function LeaderboardTable({ players, matches }: LeaderboardTableP
                             <span className="mobile-rank-number">{pos}</span>
                             <div className="summoner-icon-container" style={{ width: '2rem', height: '2rem' }}>
                               <img
-                                src={`https://ddragon.leagueoflegends.com/cdn/16.10.1/img/profileicon/${player.profileIconId}.png`}
+                                src={`https://ddragon.leagueoflegends.com/cdn/${DDRAGON_VERSION}/img/profileicon/${player.profileIconId}.png`}
                                 alt="Profile"
                                 className="summoner-icon"
                                 onError={(e) => {
-                                  (e.target as HTMLImageElement).src = 'https://ddragon.leagueoflegends.com/cdn/16.10.1/img/profileicon/29.png';
+                                  (e.target as HTMLImageElement).src = `https://ddragon.leagueoflegends.com/cdn/${DDRAGON_VERSION}/img/profileicon/29.png`;
                                 }}
                               />
                             </div>
@@ -416,10 +417,10 @@ export default function LeaderboardTable({ players, matches }: LeaderboardTableP
                   >
                     <div className="feed-left">
                       <FallbackImage
-                        src={`https://ddragon.leagueoflegends.com/cdn/16.10.1/img/champion/${match.championName}.png`}
+                        src={`https://ddragon.leagueoflegends.com/cdn/${DDRAGON_VERSION}/img/champion/${match.championName}.png`}
                         alt={match.championName}
                         className="champ-icon"
-                        fallbackSrc="https://ddragon.leagueoflegends.com/cdn/16.10.1/img/profileicon/29.png"
+                        fallbackSrc={`https://ddragon.leagueoflegends.com/cdn/${DDRAGON_VERSION}/img/profileicon/29.png`}
                       />
                       <div className="feed-details">
                         <span className="feed-player">
