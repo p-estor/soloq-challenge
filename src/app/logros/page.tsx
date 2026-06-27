@@ -6,6 +6,7 @@ import FallbackImage from '@/components/FallbackImage';
 import { calculateStreakWinners } from '@/lib/achievements';
 import SpecialAchievementsList from '@/components/SpecialAchievementsList';
 import AchievementsPro from '@/components/AchievementsPro';
+import { DDRAGON_VERSION } from '@/lib/riot';
 
 
 
@@ -321,12 +322,12 @@ export default async function AchievementsPage() {
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', background: 'rgba(5, 8, 12, 0.4)', padding: '0.75rem', borderRadius: '8px', border: '1px solid var(--border-normal)' }}>
               <div style={{ width: '2.5rem', height: '2.5rem', position: 'relative' }}>
                 <FallbackImage
-                  src={`https://ddragon.leagueoflegends.com/cdn/16.10.1/img/profileicon/${mostActivePlayer.profileIconId}.png`}
+                  src={`https://ddragon.leagueoflegends.com/cdn/${DDRAGON_VERSION}/img/profileicon/${mostActivePlayer.profileIconId}.png`}
                   alt={mostActivePlayer.gameName}
                   width={40}
                   height={40}
                   style={{ borderRadius: '6px', border: '1px solid var(--border-normal)' }}
-                  fallbackSrc="https://ddragon.leagueoflegends.com/cdn/16.10.1/img/profileicon/29.png"
+                  fallbackSrc={`https://ddragon.leagueoflegends.com/cdn/${DDRAGON_VERSION}/img/profileicon/29.png`}
                 />
               </div>
               <div>
@@ -360,12 +361,12 @@ export default async function AchievementsPage() {
           {topKillsMatch ? (
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', background: 'rgba(5, 8, 12, 0.4)', padding: '0.75rem', borderRadius: '8px', border: '1px solid var(--border-normal)' }}>
               <FallbackImage
-                src={`https://ddragon.leagueoflegends.com/cdn/16.10.1/img/champion/${topKillsMatch.championName}.png`}
+                src={`https://ddragon.leagueoflegends.com/cdn/${DDRAGON_VERSION}/img/champion/${topKillsMatch.championName}.png`}
                 alt={topKillsMatch.championName}
                 width={40}
                 height={40}
                 style={{ borderRadius: '50%', border: '1px solid var(--border-normal)' }}
-                fallbackSrc="https://ddragon.leagueoflegends.com/cdn/16.10.1/img/profileicon/29.png"
+                fallbackSrc={`https://ddragon.leagueoflegends.com/cdn/${DDRAGON_VERSION}/img/profileicon/29.png`}
               />
               <div>
                 <div style={{ fontWeight: 700, fontSize: '0.9rem', color: 'var(--text-primary)' }}>
@@ -398,12 +399,12 @@ export default async function AchievementsPage() {
           {topDeathlessMatch ? (
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', background: 'rgba(5, 8, 12, 0.4)', padding: '0.75rem', borderRadius: '8px', border: '1px solid var(--border-normal)' }}>
               <FallbackImage
-                src={`https://ddragon.leagueoflegends.com/cdn/16.10.1/img/champion/${topDeathlessMatch.championName}.png`}
+                src={`https://ddragon.leagueoflegends.com/cdn/${DDRAGON_VERSION}/img/champion/${topDeathlessMatch.championName}.png`}
                 alt={topDeathlessMatch.championName}
                 width={40}
                 height={40}
                 style={{ borderRadius: '50%', border: '1px solid var(--border-normal)' }}
-                fallbackSrc="https://ddragon.leagueoflegends.com/cdn/16.10.1/img/profileicon/29.png"
+                fallbackSrc={`https://ddragon.leagueoflegends.com/cdn/${DDRAGON_VERSION}/img/profileicon/29.png`}
               />
               <div>
                 <div style={{ fontWeight: 700, fontSize: '0.9rem', color: 'var(--text-primary)' }}>
@@ -436,12 +437,12 @@ export default async function AchievementsPage() {
           {fastestWinMatch ? (
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', background: 'rgba(5, 8, 12, 0.4)', padding: '0.75rem', borderRadius: '8px', border: '1px solid var(--border-normal)' }}>
               <FallbackImage
-                src={`https://ddragon.leagueoflegends.com/cdn/16.10.1/img/champion/${fastestWinMatch.championName}.png`}
+                src={`https://ddragon.leagueoflegends.com/cdn/${DDRAGON_VERSION}/img/champion/${fastestWinMatch.championName}.png`}
                 alt={fastestWinMatch.championName}
                 width={40}
                 height={40}
                 style={{ borderRadius: '50%', border: '1px solid var(--border-normal)' }}
-                fallbackSrc="https://ddragon.leagueoflegends.com/cdn/16.10.1/img/profileicon/29.png"
+                fallbackSrc={`https://ddragon.leagueoflegends.com/cdn/${DDRAGON_VERSION}/img/profileicon/29.png`}
               />
               <div>
                 <div style={{ fontWeight: 700, fontSize: '0.9rem', color: 'var(--text-primary)' }}>
@@ -474,12 +475,12 @@ export default async function AchievementsPage() {
           {bestFarmerMatch ? (
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', background: 'rgba(5, 8, 12, 0.4)', padding: '0.75rem', borderRadius: '8px', border: '1px solid var(--border-normal)' }}>
               <FallbackImage
-                src={`https://ddragon.leagueoflegends.com/cdn/16.10.1/img/champion/${bestFarmerMatch.championName}.png`}
+                src={`https://ddragon.leagueoflegends.com/cdn/${DDRAGON_VERSION}/img/champion/${bestFarmerMatch.championName}.png`}
                 alt={bestFarmerMatch.championName}
                 width={40}
                 height={40}
                 style={{ borderRadius: '50%', border: '1px solid var(--border-normal)' }}
-                fallbackSrc="https://ddragon.leagueoflegends.com/cdn/16.10.1/img/profileicon/29.png"
+                fallbackSrc={`https://ddragon.leagueoflegends.com/cdn/${DDRAGON_VERSION}/img/profileicon/29.png`}
               />
               <div>
                 <div style={{ fontWeight: 700, fontSize: '0.9rem', color: 'var(--text-primary)' }}>
@@ -512,12 +513,12 @@ export default async function AchievementsPage() {
           {topDeathsMatch ? (
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', background: 'rgba(5, 8, 12, 0.4)', padding: '0.75rem', borderRadius: '8px', border: '1px solid var(--border-normal)' }}>
               <FallbackImage
-                src={`https://ddragon.leagueoflegends.com/cdn/16.10.1/img/champion/${topDeathsMatch.championName}.png`}
+                src={`https://ddragon.leagueoflegends.com/cdn/${DDRAGON_VERSION}/img/champion/${topDeathsMatch.championName}.png`}
                 alt={topDeathsMatch.championName}
                 width={40}
                 height={40}
                 style={{ borderRadius: '50%', border: '1px solid var(--border-normal)' }}
-                fallbackSrc="https://ddragon.leagueoflegends.com/cdn/16.10.1/img/profileicon/29.png"
+                fallbackSrc={`https://ddragon.leagueoflegends.com/cdn/${DDRAGON_VERSION}/img/profileicon/29.png`}
               />
               <div>
                 <div style={{ fontWeight: 700, fontSize: '0.9rem', color: 'var(--text-primary)' }}>

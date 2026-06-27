@@ -455,7 +455,7 @@ export default function AdminDashboard({ players }: AdminDashboardProps) {
                           }}
                           title="Haz clic para alternar nivel de Elo"
                         >
-                          {player.isHighElo ? '🛡️ High Elo' : '⚔️ Low Elo'}
+                          {player.isHighElo ? 'HIGH ELO' : 'LOW ELO'}
                         </button>
                       </td>
                       <td>

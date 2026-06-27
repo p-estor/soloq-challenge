@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { ChevronLeft, ExternalLink } from 'lucide-react';
 import FallbackImage from './FallbackImage';
 import TierIcon from './TierIcon';
+import { DDRAGON_VERSION } from '@/lib/riot';
 
 interface Match {
   id: string;
@@ -120,10 +121,10 @@ export default function PlayerProfilePro({ player, matches, snapshots, progressL
             <ChevronLeft size={18} />
           </Link>
           <FallbackImage
-            src={`https://ddragon.leagueoflegends.com/cdn/16.10.1/img/profileicon/${player.profileIconId}.png`}
+            src={`https://ddragon.leagueoflegends.com/cdn/${DDRAGON_VERSION}/img/profileicon/${player.profileIconId}.png`}
             alt={player.gameName}
             className="pro-profile-icon"
-            fallbackSrc="https://ddragon.leagueoflegends.com/cdn/16.10.1/img/profileicon/29.png"
+            fallbackSrc={`https://ddragon.leagueoflegends.com/cdn/${DDRAGON_VERSION}/img/profileicon/29.png`}
           />
           <div className="pro-profile-info">
             <h1 className="pro-profile-name">{player.alias || player.gameName}</h1>
@@ -189,10 +190,10 @@ export default function PlayerProfilePro({ player, matches, snapshots, progressL
                     <div className={`pro-match-indicator ${match.isRemake ? 'remake' : match.win ? 'win' : 'loss'}`} />
                     <div className="pro-col-champ" style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
                       <FallbackImage
-                        src={`https://ddragon.leagueoflegends.com/cdn/16.10.1/img/champion/${match.championName}.png`}
+                        src={`https://ddragon.leagueoflegends.com/cdn/${DDRAGON_VERSION}/img/champion/${match.championName}.png`}
                         alt={match.championName}
                         className="pro-match-champ-icon"
-                        fallbackSrc="https://ddragon.leagueoflegends.com/cdn/16.10.1/img/profileicon/29.png"
+                        fallbackSrc={`https://ddragon.leagueoflegends.com/cdn/${DDRAGON_VERSION}/img/profileicon/29.png`}
                       />
                       <div style={{ display: 'flex', flexDirection: 'column' }}>
                         <span className="pro-match-champ-name">{match.championName}</span>
@@ -225,10 +226,10 @@ export default function PlayerProfilePro({ player, matches, snapshots, progressL
             {topChampions.map(champ => (
               <div key={champ.name} className="pro-champ-row">
                 <FallbackImage
-                  src={`https://ddragon.leagueoflegends.com/cdn/16.10.1/img/champion/${champ.name}.png`}
+                  src={`https://ddragon.leagueoflegends.com/cdn/${DDRAGON_VERSION}/img/champion/${champ.name}.png`}
                   alt={champ.name}
                   className="pro-sidebar-champ-icon"
-                  fallbackSrc="https://ddragon.leagueoflegends.com/cdn/16.10.1/img/profileicon/29.png"
+                  fallbackSrc={`https://ddragon.leagueoflegends.com/cdn/${DDRAGON_VERSION}/img/profileicon/29.png`}
                 />
                 <div className="pro-champ-info">
                   <span className="pro-champ-name">{champ.name}</span>

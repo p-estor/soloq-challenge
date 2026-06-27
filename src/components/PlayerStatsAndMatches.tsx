@@ -4,6 +4,7 @@ import React, { useMemo } from 'react';
 import FallbackImage from './FallbackImage';
 import { Swords, Award, TrendingUp } from 'lucide-react';
 import LPChart from './LPChart';
+import { DDRAGON_VERSION } from '@/lib/riot';
 
 interface Match {
   id: string;
@@ -186,10 +187,10 @@ export default function PlayerStatsAndMatches({ matches, snapshots }: PlayerStat
 
                       <div className="match-champ-info">
                         <FallbackImage
-                          src={`https://ddragon.leagueoflegends.com/cdn/16.10.1/img/champion/${match.championName}.png`}
+                          src={`https://ddragon.leagueoflegends.com/cdn/${DDRAGON_VERSION}/img/champion/${match.championName}.png`}
                           alt={match.championName}
                           className="match-champ-icon"
-                          fallbackSrc="https://ddragon.leagueoflegends.com/cdn/16.10.1/img/profileicon/29.png"
+                          fallbackSrc={`https://ddragon.leagueoflegends.com/cdn/${DDRAGON_VERSION}/img/profileicon/29.png`}
                         />
                         <div className="match-champ-meta">
                           <span className="match-champ-name">{match.championName}</span>
@@ -248,10 +249,10 @@ export default function PlayerStatsAndMatches({ matches, snapshots }: PlayerStat
                   <div key={champ.name} className="champ-stat-row">
                     <div className="champ-stat-left">
                       <FallbackImage
-                        src={`https://ddragon.leagueoflegends.com/cdn/16.10.1/img/champion/${champ.name}.png`}
+                        src={`https://ddragon.leagueoflegends.com/cdn/${DDRAGON_VERSION}/img/champion/${champ.name}.png`}
                         alt={champ.name}
                         className="champ-stat-icon"
-                        fallbackSrc="https://ddragon.leagueoflegends.com/cdn/16.10.1/img/profileicon/29.png"
+                        fallbackSrc={`https://ddragon.leagueoflegends.com/cdn/${DDRAGON_VERSION}/img/profileicon/29.png`}
                       />
                       <div>
                         <span className="champ-stat-name">{champ.name}</span>

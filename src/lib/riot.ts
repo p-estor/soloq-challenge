@@ -1,4 +1,6 @@
 
+export const DDRAGON_VERSION = '16.13.1';
+
 // Rate limit helper
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 

@@ -6,6 +6,7 @@ import { Search } from 'lucide-react';
 import TierIcon from './TierIcon';
 import FallbackImage from './FallbackImage';
 import { ProcessedPlayer, ProcessedMatch } from './LeaderboardTable';
+import { DDRAGON_VERSION } from '@/lib/riot';
 
 interface LeaderboardProProps {
   players: ProcessedPlayer[];
@@ -89,10 +90,10 @@ export default function LeaderboardPro({ players, matches }: LeaderboardProProps
                       <td className="td-player">
                         <Link href={`/player/${player.puuid}`} className="pro-player-link">
                           <FallbackImage
-                            src={`https://ddragon.leagueoflegends.com/cdn/16.12.1/img/profileicon/${player.profileIconId}.png`}
+                            src={`https://ddragon.leagueoflegends.com/cdn/${DDRAGON_VERSION}/img/profileicon/${player.profileIconId}.png`}
                             alt={player.gameName}
                             className="pro-avatar"
-                            fallbackSrc="https://ddragon.leagueoflegends.com/cdn/16.12.1/img/profileicon/29.png"
+                            fallbackSrc={`https://ddragon.leagueoflegends.com/cdn/${DDRAGON_VERSION}/img/profileicon/29.png`}
                           />
                           <div className="pro-player-names">
                             <span className="pro-alias">{player.alias || player.gameName}</span>
@@ -154,10 +155,10 @@ export default function LeaderboardPro({ players, matches }: LeaderboardProProps
               >
                 <div className={`pro-feed-indicator ${match.isRemake ? 'remake' : match.win ? 'win' : 'loss'}`} />
                 <FallbackImage
-                  src={`https://ddragon.leagueoflegends.com/cdn/16.12.1/img/champion/${match.championName}.png`}
+                  src={`https://ddragon.leagueoflegends.com/cdn/${DDRAGON_VERSION}/img/champion/${match.championName}.png`}
                   alt={match.championName}
                   className="pro-feed-champ-icon"
-                  fallbackSrc="https://ddragon.leagueoflegends.com/cdn/16.12.1/img/profileicon/29.png"
+                  fallbackSrc={`https://ddragon.leagueoflegends.com/cdn/${DDRAGON_VERSION}/img/profileicon/29.png`}
                 />
                 <div className="pro-feed-content">
                   <div className="pro-feed-top">

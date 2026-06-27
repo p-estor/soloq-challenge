@@ -205,13 +205,13 @@ export default function LeaderboardTable({ players, matches }: LeaderboardTableP
                 onClick={() => setEloTab('HIGH')}
                 className={`filter-tab ${eloTab === 'HIGH' ? 'active' : ''}`}
               >
-                🛡️ High Elo
+                High Elo
               </button>
               <button
                 onClick={() => setEloTab('LOW')}
                 className={`filter-tab ${eloTab === 'LOW' ? 'active' : ''}`}
               >
-                ⚔️ Low Elo
+                Low Elo
               </button>
             </div>
           </div>
