@@ -103,7 +103,16 @@ export default function LeaderboardPro({ players, matches }: LeaderboardProProps
                       </td>
                       <td className="td-tier">
                         <div className="pro-tier-display">
-                          <TierIcon tier={player.tier} size={24} className="pro-tier-icon" />
+                           <img
+                             src={`https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-static-assets/global/default/images/ranked-mini-crests/${player.tier.toLowerCase()}.png`}
+                             alt={player.tier}
+                             width={24}
+                             height={24}
+                             className="pro-tier-icon"
+                             onError={(e) => {
+                               (e.target as HTMLImageElement).src = 'https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-static-assets/global/default/images/ranked-mini-crests/unranked.png';
+                             }}
+                           />
                           <span className="pro-tier-text">
                             {player.tier} {['MASTER', 'GRANDMASTER', 'CHALLENGER'].includes(player.tier.toUpperCase()) ? '' : player.rank}
                           </span>

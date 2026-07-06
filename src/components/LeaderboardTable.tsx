@@ -272,9 +272,17 @@ export default function LeaderboardTable({ players, matches }: LeaderboardTableP
                           </td>
                           <td>
                             <div className="rank-display-cell">
-                              <span className="hide-mobile">
-                                <TierIcon tier={player.tier} size={36} />
-                              </span>
+                               <span className="hide-mobile" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '36px', height: '36px' }}>
+                                 <img
+                                   src={`https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-static-assets/global/default/images/ranked-mini-crests/${player.tier.toLowerCase()}.png`}
+                                   alt={player.tier}
+                                   width={36}
+                                   height={36}
+                                   onError={(e) => {
+                                     (e.target as HTMLImageElement).src = 'https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-static-assets/global/default/images/ranked-mini-crests/unranked.png';
+                                   }}
+                                 />
+                               </span>
                               <div className="rank-details">
                                 <span className="rank-tier">
                                   {['MASTER', 'GRANDMASTER', 'CHALLENGER'].includes(player.tier.toUpperCase()) 
