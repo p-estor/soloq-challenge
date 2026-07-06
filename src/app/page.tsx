@@ -7,6 +7,7 @@ import { Users, Swords, TrendingUp } from 'lucide-react';
 import Link from 'next/link';
 import FallbackImage from '@/components/FallbackImage';
 import Countdown from '@/components/Countdown';
+import ChallengeSummary from '@/components/ChallengeSummary';
 
 export const revalidate = 60; // Revalidate this page every 60 seconds
 
@@ -61,6 +62,104 @@ export default async function LeaderboardPage() {
       },
     },
   });
+
+  // Queries for closing server achievements / records
+  const totalPentakillsCount = await prisma.match.count({
+    where: { pentaKills: { gt: 0 }, isRemake: false }
+  });
+
+  const totalStealsCount = await prisma.match.count({
+    where: { objectivesStolen: { gt: 0 }, isRemake: false }
+  });
+
+  // A. El Terror de la Grieta (Highest kills)
+  const recordKillsMatchRaw = await prisma.match.findFirst({
+    where: { isRemake: false },
+    orderBy: { kills: 'desc' },
+    include: { player: { select: { gameName: true, alias: true, tagLine: true, profileIconId: true } } }
+  });
+
+  const recordKillsMatch = recordKillsMatchRaw ? {
+    alias: recordKillsMatchRaw.player.alias,
+    gameName: recordKillsMatchRaw.player.gameName,
+    championName: recordKillsMatchRaw.championName,
+    profileIconId: recordKillsMatchRaw.player.profileIconId,
+    kills: recordKillsMatchRaw.kills,
+    deaths: recordKillsMatchRaw.deaths,
+    assists: recordKillsMatchRaw.assists,
+  } : null;
+
+  // B. El Inmortal (Best deathless game win)
+  const recordDeathlessMatchRaw = await prisma.match.findFirst({
+    where: { deaths: 0, win: true, isRemake: false },
+    orderBy: { kills: 'desc' },
+    include: { player: { select: { gameName: true, alias: true, tagLine: true, profileIconId: true } } }
+  });
+
+  const recordDeathlessMatch = recordDeathlessMatchRaw ? {
+    alias: recordDeathlessMatchRaw.player.alias,
+    gameName: recordDeathlessMatchRaw.player.gameName,
+    championName: recordDeathlessMatchRaw.championName,
+    profileIconId: recordDeathlessMatchRaw.player.profileIconId,
+    kills: recordDeathlessMatchRaw.kills,
+    deaths: recordDeathlessMatchRaw.deaths,
+    assists: recordDeathlessMatchRaw.assists,
+  } : null;
+
+  // C. El Speedrunner (Fastest win > 900s)
+  const recordSpeedrunMatchRaw = await prisma.match.findFirst({
+    where: { win: true, gameDuration: { gt: 900 }, isRemake: false },
+    orderBy: { gameDuration: 'asc' },
+    include: { player: { select: { gameName: true, alias: true, tagLine: true, profileIconId: true } } }
+  });
+
+  const recordSpeedrunMatch = recordSpeedrunMatchRaw ? {
+    alias: recordSpeedrunMatchRaw.player.alias,
+    gameName: recordSpeedrunMatchRaw.player.gameName,
+    championName: recordSpeedrunMatchRaw.championName,
+    profileIconId: recordSpeedrunMatchRaw.player.profileIconId,
+    gameDuration: recordSpeedrunMatchRaw.gameDuration,
+  } : null;
+
+  // D. El Farmer del Año (Highest CS per minute, game duration > 900s)
+  const allMatchesForFarmer = await prisma.match.findMany({
+    where: { gameDuration: { gt: 900 }, isRemake: false },
+    include: { player: { select: { gameName: true, alias: true, tagLine: true, profileIconId: true } } }
+  });
+  
+  let bestFarmer = null;
+  let maxCsPerMin = 0;
+  for (const m of allMatchesForFarmer) {
+    const csPerMin = m.cs / (m.gameDuration / 60);
+    if (csPerMin > maxCsPerMin) {
+      maxCsPerMin = csPerMin;
+      bestFarmer = {
+        alias: m.player.alias,
+        gameName: m.player.gameName,
+        championName: m.championName,
+        profileIconId: m.player.profileIconId,
+        csPerMin: Math.round(csPerMin * 10) / 10,
+        cs: m.cs,
+      };
+    }
+  }
+
+  // E. El Sacrificado (Most deaths in a single match)
+  const recordDeathsMatchRaw = await prisma.match.findFirst({
+    where: { isRemake: false },
+    orderBy: { deaths: 'desc' },
+    include: { player: { select: { gameName: true, alias: true, tagLine: true, profileIconId: true } } }
+  });
+
+  const recordDeathsMatch = recordDeathsMatchRaw ? {
+    alias: recordDeathsMatchRaw.player.alias,
+    gameName: recordDeathsMatchRaw.player.gameName,
+    championName: recordDeathsMatchRaw.championName,
+    profileIconId: recordDeathsMatchRaw.player.profileIconId,
+    kills: recordDeathsMatchRaw.kills,
+    deaths: recordDeathsMatchRaw.deaths,
+    assists: recordDeathsMatchRaw.assists,
+  } : null;
 
   const totalMatchesCount = rawPlayers.reduce((sum, p) => sum + p.wins + p.losses, 0);
 
@@ -163,6 +262,17 @@ export default async function LeaderboardPage() {
         title="Fin del SoloQ Challenge"
         badgeText="7 de Julio, 2026 - 23:59"
       />
+
+      <ChallengeSummary 
+         players={processedPlayers} 
+         totalPentakills={totalPentakillsCount}
+         totalSteals={totalStealsCount}
+         recordKillsMatch={recordKillsMatch}
+         recordDeathlessMatch={recordDeathlessMatch}
+         recordSpeedrunMatch={recordSpeedrunMatch}
+         bestFarmer={bestFarmer}
+         recordDeathsMatch={recordDeathsMatch}
+       />
 
       {/* Hero Stats Section */}
       <div className="hero-stats-section">
