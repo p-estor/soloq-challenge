@@ -89,7 +89,6 @@ export default function ChallengeSummary({
   bestFarmer,
   recordDeathsMatch
 }: ChallengeSummaryProps) {
-  const [isOpen, setIsOpen] = useState(false);
   const [isExpired, setIsExpired] = useState(false);
 
   useEffect(() => {
@@ -136,14 +135,8 @@ export default function ChallengeSummary({
 
   return (
     <div className="glass-panel" style={{ marginBottom: '2rem', padding: '1.25rem' }}>
-      <button 
-        onClick={() => isExpired && setIsOpen(!isOpen)}
+      <div 
         style={{
-          width: '100%',
-          background: 'none',
-          border: 'none',
-          color: 'var(--text-primary)',
-          cursor: isExpired ? 'pointer' : 'default',
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
@@ -180,15 +173,9 @@ export default function ChallengeSummary({
             </span>
           )}
         </h2>
-        {isExpired && (
-          <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
-            {isOpen ? 'Ocultar ▲' : 'Mostrar ▼'}
-          </span>
-        )}
-      </button>
+      </div>
 
-      {isOpen && (
-        <div style={{ marginTop: '1.5rem', display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+      <div style={{ marginTop: '1.5rem', display: 'flex', flexDirection: 'column', gap: '2rem' }}>
           
           {/* Podio Visual */}
           <div>
@@ -499,7 +486,6 @@ export default function ChallengeSummary({
           </div>
 
         </div>
-      )}
     </div>
   );
 }
