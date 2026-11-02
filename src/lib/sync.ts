@@ -1,8 +1,10 @@
 import { prisma } from './db';
 import { riot, getGlobalLp } from './riot';
+import { getChallengeDates } from './config';
+import { acquireSyncLock, releaseSyncLock } from './sync-lock';
 
 // Helper to delay between API requests to avoid rate limits
-const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 export async function syncPlayer(playerId: string): Promise<void> {
   const player = await prisma.player.findUnique({
@@ -43,7 +45,7 @@ export async function syncPlayer(playerId: string): Promise<void> {
   const leagueEntries = await riot.getLeagueEntries(player.puuid);
   await delay(200);
 
-  const soloQEntry = leagueEntries.find(entry => entry.queueType === 'RANKED_SOLO_5x5');
+  const soloQEntry = leagueEntries.find((entry) => entry.queueType === 'RANKED_SOLO_5x5');
 
   let tier = 'UNRANKED';
   let rank = '';
@@ -83,7 +85,7 @@ export async function syncPlayer(playerId: string): Promise<void> {
       await delay(200);
       const mainLeagueEntries = await riot.getLeagueEntries(mainAccount.puuid);
       await delay(200);
-      const mainSoloQ = mainLeagueEntries.find(entry => entry.queueType === 'RANKED_SOLO_5x5');
+      const mainSoloQ = mainLeagueEntries.find((entry) => entry.queueType === 'RANKED_SOLO_5x5');
       if (mainSoloQ) {
         mainTier = mainSoloQ.tier;
         mainRank = mainSoloQ.rank;
@@ -98,14 +100,18 @@ export async function syncPlayer(playerId: string): Promise<void> {
     }
   }
 
-  // 3. Sync recent matches (last 150 games)
-  // If the player already has matches in the DB, we only fetch the last 20 to find new ones.
-  // Otherwise, we fetch 150 to populate their initial history.
+  // 3. Sync matches from challenge start date
+  const { startDate, endDate } = await getChallengeDates();
+  const startSeconds = Math.floor(startDate.getTime() / 1000);
+
   const existingMatchesCount = await prisma.match.count({
     where: { playerId: player.id },
   });
-  const fetchLimit = existingMatchesCount > 0 ? 20 : 150;
-  const matchIds = await riot.getMatchIds(player.puuid, fetchLimit);
+  const fetchLimit = existingMatchesCount > 0 ? 20 : 100;
+  const matchIds = await riot.getMatchIds(player.puuid, {
+    count: fetchLimit,
+    startTime: startSeconds,
+  });
   await delay(200);
 
   // Check which matches we already have saved
@@ -117,8 +123,8 @@ export async function syncPlayer(playerId: string): Promise<void> {
     select: { matchId: true },
   });
 
-  const existingMatchIds = new Set(existingMatches.map(m => m.matchId));
-  const newMatchIds = matchIds.filter(id => !existingMatchIds.has(id));
+  const existingMatchIds = new Set(existingMatches.map((m) => m.matchId));
+  const newMatchIds = matchIds.filter((id) => !existingMatchIds.has(id));
 
   console.log(`Found ${newMatchIds.length} new matches to fetch for ${player.gameName}`);
 
@@ -135,12 +141,18 @@ export async function syncPlayer(playerId: string): Promise<void> {
       if (participant) {
         const queueId = matchData.info.queueId;
         const allowedQueues = [420, 440];
-        const minStartDate = new Date('2026-06-07T00:00:00+02:00').getTime();
-        const maxEndDate = new Date('2026-07-07T23:59:59+02:00').getTime();
+        const minStartDate = startDate.getTime();
+        const maxEndDate = endDate.getTime();
         const gameCreationTime = matchData.info.gameCreation;
-        
-        if (allowedQueues.includes(queueId) && gameCreationTime >= minStartDate && gameCreationTime <= maxEndDate) {
-          const isRemake = !!(participant.gameEndedInEarlySurrender || matchData.info.gameDuration < 240);
+
+        if (
+          allowedQueues.includes(queueId) &&
+          gameCreationTime >= minStartDate &&
+          gameCreationTime <= maxEndDate
+        ) {
+          const isRemake = !!(
+            participant.gameEndedInEarlySurrender || matchData.info.gameDuration < 240
+          );
           await prisma.match.create({
             data: {
               matchId,
@@ -170,12 +182,11 @@ export async function syncPlayer(playerId: string): Promise<void> {
     }
   }
 
-  // 4. Compute current win/loss streak from actual saved matches (SoloQ queueId = 420 or allowed queues before challenge starts)
-  const CHALLENGE_START_DATE = new Date('2026-06-05T00:00:00');
-  const hasChallengeStarted = new Date() >= CHALLENGE_START_DATE;
+  // 4. Compute current win/loss streak from actual saved matches
+  const hasChallengeStarted = new Date() >= startDate;
   const recentSavedMatches = await prisma.match.findMany({
-    where: { 
-      playerId: player.id, 
+    where: {
+      playerId: player.id,
       queueId: hasChallengeStarted ? 420 : { in: [420, 440] },
       isRemake: false,
     },
@@ -196,16 +207,16 @@ export async function syncPlayer(playerId: string): Promise<void> {
     }
   }
 
-  // Count wins/losses from database matches (excluding remakes) for all players
+  // Count wins/losses from database matches (excluding remakes)
   const challengeMatches = await prisma.match.findMany({
     where: {
       playerId: player.id,
       queueId: hasChallengeStarted ? 420 : { in: [420, 440] },
       isRemake: false,
-    }
+    },
   });
-  wins = challengeMatches.filter(m => m.win).length;
-  losses = challengeMatches.filter(m => !m.win).length;
+  wins = challengeMatches.filter((m) => m.win).length;
+  losses = challengeMatches.filter((m) => !m.win).length;
 
   // 5. Update player record
   await prisma.player.update({
@@ -252,31 +263,46 @@ export async function syncPlayer(playerId: string): Promise<void> {
         globalLp: currentGlobalLp,
       },
     });
-    console.log(`Created LP snapshot for ${player.gameName}: ${tier} ${rank} - ${lp} LP (${currentGlobalLp} Global LP)`);
+    console.log(
+      `Created LP snapshot for ${player.gameName}: ${tier} ${rank} - ${lp} LP (${currentGlobalLp} Global LP)`
+    );
   }
 }
 
-// Sync all players in the database
-export async function syncAllPlayers(): Promise<{ success: boolean; count: number; errors: string[] }> {
-  const players = await prisma.player.findMany();
-  const errors: string[] = [];
-  
-  console.log(`Starting sync for all ${players.length} players...`);
-  
-  for (const player of players) {
-    try {
-      await syncPlayer(player.id);
-      // Wait 1 second between players to respect Riot rate limits
-      await delay(1000);
-    } catch (err: any) {
-      console.error(`Error syncing player ${player.gameName}#${player.tagLine}:`, err);
-      errors.push(`${player.gameName}#${player.tagLine}: ${err.message || err}`);
-    }
+// Sync all players in the database with global lock protection
+export async function syncAllPlayers(initiator = 'web'): Promise<{
+  success: boolean;
+  count: number;
+  errors: string[];
+}> {
+  const acquired = await acquireSyncLock(initiator);
+  if (!acquired) {
+    throw new Error('Sincronización rechazada: ya existe otro proceso de sincronización en curso o el bloqueo aún no ha expirado.');
   }
 
-  return {
-    success: errors.length === 0,
-    count: players.length,
-    errors,
-  };
+  try {
+    const players = await prisma.player.findMany();
+    const errors: string[] = [];
+
+    console.log(`Starting sync for all ${players.length} players (initiator: ${initiator})...`);
+
+    for (const player of players) {
+      try {
+        await syncPlayer(player.id);
+        // Wait 1 second between players to respect Riot rate limits
+        await delay(1000);
+      } catch (err: any) {
+        console.error(`Error syncing player ${player.gameName}#${player.tagLine}:`, err);
+        errors.push(`${player.gameName}#${player.tagLine}: ${err.message || err}`);
+      }
+    }
+
+    return {
+      success: errors.length === 0,
+      count: players.length,
+      errors,
+    };
+  } finally {
+    await releaseSyncLock();
+  }
 }

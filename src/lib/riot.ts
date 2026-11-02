@@ -4,6 +4,12 @@ export const DDRAGON_VERSION = '16.13.1';
 // Rate limit helper
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
+export interface GetMatchIdsOptions {
+  count?: number;
+  startTime?: number; // Unix epoch timestamp in seconds
+  queue?: number;
+}
+
 // Region endpoints: Account and Matches use regional routing (europe for EUW)
 // Ranks and Summoner use platform routing (euw1 for EUW)
 const REGION_ROUTING = 'europe';
@@ -133,14 +139,27 @@ export const riot = {
     return await riotRequest<LeagueEntry[]>(url);
   },
 
-  // Fetch matches for a PUUID (only SoloQ if challenge started, all matches otherwise)
-  async getMatchIds(puuid: string, count = 20): Promise<string[]> {
-    const CHALLENGE_START_DATE = new Date('2026-06-05T00:00:00');
-    const hasChallengeStarted = new Date() >= CHALLENGE_START_DATE;
-    const queueParam = hasChallengeStarted ? '&queue=420' : '';
-    
+  // Fetch match IDs for a PUUID with optional startTime (in seconds) and count
+  async getMatchIds(
+    puuid: string,
+    countOrOptions: number | GetMatchIdsOptions = 20,
+    legacyStartTime?: number
+  ): Promise<string[]> {
+    const count = typeof countOrOptions === 'number' ? countOrOptions : countOrOptions.count ?? 20;
+    const startTime = typeof countOrOptions === 'object' ? countOrOptions.startTime : legacyStartTime;
+    const queue = typeof countOrOptions === 'object' ? countOrOptions.queue : undefined;
+
+    const queryParts: string[] = [];
+    if (typeof startTime === 'number') {
+      queryParts.push(`startTime=${startTime}`);
+    }
+    if (typeof queue === 'number') {
+      queryParts.push(`queue=${queue}`);
+    }
+    const extraParams = queryParts.length > 0 ? `&${queryParts.join('&')}` : '';
+
     if (count <= 100) {
-      const url = `https://${REGION_ROUTING}.api.riotgames.com/lol/match/v5/matches/by-puuid/${puuid}/ids?start=0&count=${count}${queueParam}`;
+      const url = `https://${REGION_ROUTING}.api.riotgames.com/lol/match/v5/matches/by-puuid/${puuid}/ids?start=0&count=${count}${extraParams}`;
       return await riotRequest<string[]>(url);
     }
 
@@ -148,7 +167,7 @@ export const riot = {
     let start = 0;
     while (start < count) {
       const currentCount = Math.min(100, count - start);
-      const url = `https://${REGION_ROUTING}.api.riotgames.com/lol/match/v5/matches/by-puuid/${puuid}/ids?start=${start}&count=${currentCount}${queueParam}`;
+      const url = `https://${REGION_ROUTING}.api.riotgames.com/lol/match/v5/matches/by-puuid/${puuid}/ids?start=${start}&count=${currentCount}${extraParams}`;
       const ids = await riotRequest<string[]>(url);
       allIds.push(...ids);
       if (ids.length < currentCount) {
