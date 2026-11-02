@@ -46,9 +46,10 @@ npm install
 Crea un archivo `.env` en la raíz del proyecto y añade tus credenciales:
 ```env
 DATABASE_URL="file:./dev.db" # Ruta a SQLite en local
-RIOT_API_KEY="RGAPI-tu-clave-de-desarrollo-aqui"
-SYNC_TOKEN="tu_token_secreto_para_desencadenar_sincronizaciones"
-ADMIN_PASSWORD="tu_contraseña_para_el_panel_de_administración"
+RIOT_API_KEY="<tu_riot_api_key>"
+SYNC_TOKEN="<tu_sync_token>"
+ADMIN_PASSWORD="<tu_admin_password>"
+SESSION_SECRET="<tu_session_secret_hex>"
 ```
 
 ### 4. Ejecutar migraciones de Prisma
