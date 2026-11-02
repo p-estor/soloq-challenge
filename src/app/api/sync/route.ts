@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { syncAllPlayers } from '@/lib/sync';
+import { timingSafeCompare } from '@/lib/auth';
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
@@ -11,8 +12,16 @@ export async function GET(request: Request) {
 
   const expectedToken = process.env.SYNC_TOKEN;
 
-  // If SYNC_TOKEN is defined in env, enforce security
-  if (expectedToken && token !== expectedToken && bearerToken !== expectedToken) {
+  // Enforce security: SYNC_TOKEN must be configured and matched using timing-safe comparison
+  if (!expectedToken) {
+    return NextResponse.json({ error: 'SYNC_TOKEN is not configured on the server' }, { status: 500 });
+  }
+
+  const isTokenValid =
+    (token ? timingSafeCompare(token, expectedToken) : false) ||
+    (bearerToken ? timingSafeCompare(bearerToken, expectedToken) : false);
+
+  if (!isTokenValid) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 

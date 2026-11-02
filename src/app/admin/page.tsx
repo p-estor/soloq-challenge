@@ -1,6 +1,7 @@
 import React from 'react';
 import { cookies } from 'next/headers';
 import { prisma } from '@/lib/db';
+import { ADMIN_COOKIE_NAME, verifyAdminSessionToken } from '@/lib/auth';
 import AdminDashboard from '@/components/AdminDashboard';
 import AdminLogin from '@/components/AdminLogin';
 
@@ -8,7 +9,16 @@ export const dynamic = 'force-dynamic';
 
 export default async function AdminPage() {
   const cookieStore = await cookies();
-  const isAuthenticated = cookieStore.get('admin_session')?.value === 'authenticated';
+  const sessionToken = cookieStore.get(ADMIN_COOKIE_NAME)?.value;
+  let isAuthenticated = false;
+
+  if (sessionToken) {
+    try {
+      isAuthenticated = verifyAdminSessionToken(sessionToken);
+    } catch {
+      isAuthenticated = false;
+    }
+  }
 
   if (!isAuthenticated) {
     return <AdminLogin />;

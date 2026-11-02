@@ -1,38 +1,98 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
-import { cookies } from 'next/headers';
+import { cookies, headers } from 'next/headers';
 import { prisma } from '@/lib/db';
 import { riot } from '@/lib/riot';
 import { syncPlayer, syncAllPlayers } from '@/lib/sync';
+import {
+  ADMIN_COOKIE_NAME,
+  createAdminSessionToken,
+  verifyAdminSessionToken,
+  timingSafeCompare,
+  checkLoginRateLimit,
+  recordFailedLoginAttempt,
+  resetLoginRateLimit,
+  getClientIp,
+} from '@/lib/auth';
 
-// Basic admin password check
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'REDACTED_PASSWORD';
-
-// Verify if current user is admin
+// Verify if current user is admin via cryptographic token verification
 async function isAdmin(): Promise<boolean> {
-  const cookieStore = await cookies();
-  const session = cookieStore.get('admin_session')?.value;
-  return session === 'authenticated';
+  try {
+    const cookieStore = await cookies();
+    const sessionToken = cookieStore.get(ADMIN_COOKIE_NAME)?.value;
+    if (!sessionToken) {
+      return false;
+    }
+    return verifyAdminSessionToken(sessionToken);
+  } catch (err) {
+    console.error('Failed to verify admin session token:', err);
+    return false;
+  }
 }
 
 export async function loginAdminAction(password: string): Promise<{ success: boolean; error?: string }> {
-  if (password === ADMIN_PASSWORD) {
-    const cookieStore = await cookies();
-    cookieStore.set('admin_session', 'authenticated', {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
-      maxAge: 60 * 60 * 24, // 1 day
-    });
-    return { success: true };
+  const adminPassword = process.env.ADMIN_PASSWORD;
+  if (!adminPassword) {
+    return {
+      success: false,
+      error: 'La variable ADMIN_PASSWORD no está configurada en el servidor.',
+    };
   }
-  return { success: false, error: 'Contraseña incorrecta' };
+
+  const headersList = await headers();
+  const clientIp = getClientIp(headersList);
+
+  const rateCheck = checkLoginRateLimit(clientIp);
+  if (!rateCheck.allowed) {
+    return {
+      success: false,
+      error: `Demasiados intentos fallidos. Acceso temporalmente bloqueado. Inténtalo de nuevo en ${rateCheck.retryAfterSeconds} segundos.`,
+    };
+  }
+
+  if (!timingSafeCompare(password, adminPassword)) {
+    const attempt = recordFailedLoginAttempt(clientIp);
+    if (attempt.blocked) {
+      return {
+        success: false,
+        error: 'Demasiados intentos fallidos. Tu acceso ha sido bloqueado durante 15 minutos.',
+      };
+    }
+    return {
+      success: false,
+      error: `Contraseña incorrecta. Te quedan ${attempt.remainingAttempts} intento(s) antes del bloqueo temporal.`,
+    };
+  }
+
+  // Password is correct, reset rate limit and issue signed session cookie
+  resetLoginRateLimit(clientIp);
+
+  let token: string;
+  try {
+    token = createAdminSessionToken();
+  } catch (err: any) {
+    return {
+      success: false,
+      error: err.message || 'Error al generar la sesión de administrador.',
+    };
+  }
+
+  const cookieStore = await cookies();
+  cookieStore.set(ADMIN_COOKIE_NAME, token, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
+    maxAge: 60 * 60 * 24, // 1 day
+    path: '/',
+  });
+
+  return { success: true };
 }
 
 export async function logoutAdminAction(): Promise<void> {
   const cookieStore = await cookies();
-  cookieStore.delete('admin_session');
+  cookieStore.delete(ADMIN_COOKIE_NAME);
 }
 
 export async function checkAdminStatusAction(): Promise<boolean> {
