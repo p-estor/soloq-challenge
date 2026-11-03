@@ -7,9 +7,7 @@ function getResolvedDatabaseUrl(): string {
   if (rawUrl.startsWith('file:')) {
     const filePath = rawUrl.slice(5);
     if (!path.isAbsolute(filePath)) {
-      // Find project root based on this file's location (src/lib -> ../..)
-      const projectRoot = path.resolve(__dirname, '..', '..');
-      return `file:${path.resolve(projectRoot, filePath)}`;
+      return `file:${path.resolve(process.cwd(), filePath)}`;
     }
   }
   return rawUrl;
