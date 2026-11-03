@@ -54,3 +54,7 @@ AGENTS.md
 # scratch and temp files
 scratch/
 
+# agents & skills
+.agents/
+skills-lock.json
+
